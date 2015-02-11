@@ -13,7 +13,7 @@ object Mongo {
 
   val driver = new MongoDriver
   val connection = driver.connection( List( "localhost" ) )
-  val db = connection("eventual")
+  val db = connection("mopital")
   //  db.collection[BSONCollection]("sessions").indexesManager.ensuring(true, "asd")
 
 }
