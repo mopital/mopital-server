@@ -3,8 +3,12 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
-GET     /api/patient/:name      controllers.PatientController.addUser(name: String)
+GET        /                             controllers.Application.index
+GET        /api/add/patient/:name        controllers.PatientController.addUser(name: String)
+GET        /api/allPatients              controllers.PatientController.allPatients
+
+
+GET     /views/*any                 controllers.Application.loadPublicHTML(any)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET        /assets/*file                 controllers.Assets.at(path="/public", file)

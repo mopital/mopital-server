@@ -1,9 +1,9 @@
 package dao
 
-import models.Patient
+import models.{Patient}
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
-import reactivemongo.bson.BSONObjectID
+import reactivemongo.bson.{BSONDocument, BSONObjectID}
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -19,6 +19,7 @@ trait DaoComponent {
 
     def get(id: String): Future[Option[Patient]]
     def add(patient: Patient): Future[Boolean]
+    def getAll(): Future[List[Patient]]
 
   }
 }
@@ -45,5 +46,8 @@ trait DaoComponentImpl extends DaoComponent {
 
     }
 
+    def getAll(): Future[List[Patient]] = {
+        patientCollection.find(BSONDocument(), BSONDocument()).cursor[Patient].collect[List](Int.MaxValue, true)
+    }
   }
 }

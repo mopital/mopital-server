@@ -1,6 +1,6 @@
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import reactivemongo.bson.{BSONDocumentReader, BSONDocument, BSONDocumentWriter, BSONObjectID}
 import play.modules.reactivemongo.json.BSONFormats._
 
@@ -9,9 +9,17 @@ import play.modules.reactivemongo.json.BSONFormats._
  */
 case class Patient(id: Option[BSONObjectID], name: String) {
 
+  def toJson(): JsValue = {
+    JsObject(Seq("id" -> Json.toJson(id.get.stringify),
+      "name" -> Json.toJson(name)
+    ))
+  }
+
 }
 
 object Patient {
+
+  implicit val patientFormat = Json.format[Patient]
 
   implicit object PatientBSONWriter extends BSONDocumentWriter[Patient] {
     def write(patient: Patient): BSONDocument =
