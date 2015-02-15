@@ -8,7 +8,7 @@ import play.api.mvc._
 
 object Application extends Controller {
 
-  def index = Action {
+  def index(any: String) = Action {
     Ok(views.html.index()).withHeaders(("Access-Control-Allow-Origin","*"), ("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT"))
   }
 

@@ -9,10 +9,10 @@ var app = angular.module("app", ["ngResource", "ngRoute"])
     })
     .config(["$routeProvider", function($routeProvider) {
         return $routeProvider.when("/", {
-            templateUrl: "/views/patient-list",
+            templateUrl: "/assets/html/patient-list.html",
             controller: "AppCtrl"
         }).when("/patients", {
-            templateUrl: "/views/patient-list",
+            templateUrl: "/assets/html/patient-list.html",
             controller: "AppCtrl"
         }).when("/edit/:id", {
             templateUrl: "/views/detail",
