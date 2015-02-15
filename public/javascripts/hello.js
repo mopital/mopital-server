@@ -36,7 +36,7 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
 
     var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
-    $scope.patients = PatientList.query(function(response) {
+    PatientList.query(function(response) {
             $scope.patients = response;
     });
 }]);
