@@ -8,7 +8,7 @@ GET        /api/add/patient/:name        controllers.PatientController.addUser(n
 GET        /api/allPatients              controllers.PatientController.allPatients
 
 
-GET     /views/*any                 controllers.Application.loadPublicHTML(any)
+GET     /views/*any                      controllers.Application.loadPublicHTML(any)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                 controllers.Assets.at(path="/public", file)
