@@ -1,6 +1,6 @@
 package controllers
 
-import dao.{DaoComponent, DaoComponentImpl}
+import dao.{ResponseBase, ResponseListPatient, DaoComponent, DaoComponentImpl}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -23,7 +23,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
   }
 
   def allPatients() = Action.async {
-      patientService.getAll().map(users => Ok(Json.toJson(users)))
+      patientService.getAll().map(users => Ok(ResponseListPatient(ResponseBase.success(), users).toJson))
   }
 
 }
