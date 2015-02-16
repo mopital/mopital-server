@@ -16,8 +16,8 @@ trait PatientController extends Controller with DaoComponent with PatientService
       patientService.add(name).map(result =>
 
         result match {
-          case true => Ok("ok")
-          case _ => Ok("no")
+          case true => Ok(ResponseBase.success().toJson)
+          case _ => Ok(ResponseBase.error().toJson)
         }
       )
   }
