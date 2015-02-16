@@ -1,6 +1,6 @@
 var app = angular.module("app", ["ngResource", "ngRoute"])
-    .constant("apiUrl", "http://mopital.herokuapp.com/api")
-    .constant("appUrl", "http://mopital.herokuapp.com")
+    .constant("apiUrl", "http://127.0.0.1:9000/api")
+    .constant("appUrl", "http://127.0.0.1:9000")
     .config(function ( $httpProvider) {
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
