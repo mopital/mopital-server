@@ -3,13 +3,28 @@
 # ~~~~
 
 # Home page
-GET        /                             controllers.Application.index(any = "none")
-GET        /api/add/patient/:name        controllers.PatientController.addUser(name: String)
-GET        /api/allPatients              controllers.PatientController.allPatients
+GET         /                             controllers.Application.index(any = "none")
 
 
-GET        /views/*any                   controllers.Application.loadPublicHTML(any)
+#Patient Controller
+GET         /api/add/patient/:name        controllers.PatientController.addPatient(name: String)
+GET         /api/allPatients              controllers.PatientController.allPatients
+
+
+#Beacon Controller
+POST        /api/add/beacon               controllers.BeaconController.add
+GET         /api/allBeacons               controllers.BeaconController.getAll
+
+
+
+#Bed Controller
+POST        /api/add/bed                  controllers.BeaconController.add
+GET         /api/allBeds                  controllers.BeaconController.getAll
+
+
+
+GET         /views/*any                   controllers.Application.loadPublicHTML(any)
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                 controllers.Assets.at(path="/public", file)
-GET        /*any					     controllers.Application.index(any)
+GET         /assets/*file                 controllers.Assets.at(path="/public", file)
+GET         /*any                         controllers.Application.index(any)

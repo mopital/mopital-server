@@ -16,6 +16,7 @@ trait PatientServiceComponent {
   trait PatientService {
 
     def add(name: String): Future[Boolean]
+    def get(id: String): Future[Option[Patient]]
     def getAll(): Future[List[Patient]]
 
   }
@@ -37,6 +38,9 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
       patientDao.getAll()
     }
 
+    def get(id: String): Future[Option[Patient]] = {
+      patientDao.get(id)
+    }
   }
 
 }

@@ -2,7 +2,7 @@ package dao
 
 import java.awt.print.Book
 
-import models.{Patient}
+import models.{Bed, Beacon, Patient}
 import play.i18n.Messages
 import utils.Constants
 import play.api.libs.json.{JsValue, JsArray, Json, JsObject}
@@ -36,6 +36,32 @@ case class ResponseListPatient(result: ResponseBase, data:List[Patient]) {
   }
 }
 object ResponseListBook
+
+
+
+
+case class ResponseListBeacon(result: ResponseBase, data:List[Beacon]) {
+
+  def toJson: JsObject = {
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsArray(data.map( beacon => beacon.toJson))))
+  }
+}
+object ResponseListBeacon
+
+
+
+
+case class ResponseListBed(result: ResponseBase, data:List[Bed]) {
+
+  def toJson: JsObject = {
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsArray(data.map( bed => bed.toJson))))
+  }
+}
+object ResponseListBed
+
+
+
+
 
 object ResponseBase {
   implicit val responseBaseFormat = Json.format[ResponseBase]

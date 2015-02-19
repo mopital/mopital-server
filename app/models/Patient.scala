@@ -2,8 +2,8 @@ package models
 
 import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import reactivemongo.bson.{BSONDocumentReader, BSONDocument, BSONDocumentWriter, BSONObjectID}
-import play.modules.reactivemongo.json.BSONFormats._
 
+import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 05/02/15.
  */
