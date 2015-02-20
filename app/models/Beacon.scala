@@ -6,7 +6,12 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
-case class Beacon(id: Option[BSONObjectID], number: String, major: Int, minor: Int) {
+case class Beacon(val id: Option[BSONObjectID], val number: String, val major: Int, val minor: Int) {
+
+  def this() {
+    this(Option(BSONObjectID.generate), "no_number", 100, 100)
+  }
+
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),

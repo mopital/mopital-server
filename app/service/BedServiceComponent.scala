@@ -1,7 +1,7 @@
 package service
 
 import dao.DaoComponent
-import models.Bed
+import models.{Beacon, Bed}
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
@@ -31,7 +31,7 @@ trait BedServiceComponentImpl extends BedServiceComponent {
 
     def add(number: Int): Future[Boolean] = {
 
-      bedDao.add(new Bed(Some(BSONObjectID.generate), number, null))
+      bedDao.add(new Bed(Some(BSONObjectID.generate), number, new Beacon()))
 
     }
     def getAll(): Future[List[Bed]] = {

@@ -18,8 +18,8 @@ GET         /api/allBeacons               controllers.BeaconController.getAll
 
 
 #Bed Controller
-POST        /api/add/bed                  controllers.BeaconController.add
-GET         /api/allBeds                  controllers.BeaconController.getAll
+POST        /api/add/bed                  controllers.BedController.add
+GET         /api/allBeds                  controllers.BedController.getAll
 
 
 
