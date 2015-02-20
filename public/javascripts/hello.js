@@ -15,7 +15,7 @@ var app = angular.module("app", ["ngResource", "ngRoute"])
             controller: "AppCtrl"
         }).when("/edit/:id", {
             templateUrl: "/views/detail",
-            controller: "AppCtrl"
+            controller: ""
         }).otherwise({
             redirectTo: "/"
         });
@@ -35,7 +35,8 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
 
     var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
-    PatientList.query(function(response) {
-            $scope.patients = response.data;
+    PatientList.get(function(response) {
+        $scope.patients = response.data;
+
     });
 }]);
