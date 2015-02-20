@@ -14,18 +14,20 @@ import scala.util.{Success, Try}
 object Mongo {
 
   val driver = new MongoDriver
-//  val connection = driver.connection( List( "ds043991.mongolab.com:43991" ) )
-//val db = connection("heroku_app34029761")
+  val connection = driver.connection( List( "localhost" ) )
+  val db = connection("mopital")
+//
+// HEROKU Databse Connection
+//  val uri = "mongodb://mopital:mopital@ds043991.mongolab.com:43991/heroku_app34029761"
+//
+//  val connection: Try[MongoConnection] =
+//    MongoConnection.parseURI(uri).map { parsedUri =>
+//      driver.connection(parsedUri)
+//    }
+//  val db = connection.get.db("heroku_app34029761")
 
-  val uri = "mongodb://mopital:mopital@ds043991.mongolab.com:43991/heroku_app34029761"
 
-  val connection: Try[MongoConnection] =
-    MongoConnection.parseURI(uri).map { parsedUri =>
-      driver.connection(parsedUri)
-    }
-  val db = connection.get.db("heroku_app34029761")
-
-  //  db.collection[BSONCollection]("sessions").indexesManager.ensuring(true, "asd")
+//  db.collection[BSONCollection]("sessions").indexesManager.ensuring(true, "asd")
 
 }
 trait MongoOps {
