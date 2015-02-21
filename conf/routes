@@ -4,6 +4,7 @@
 
 # Home page
 GET         /                             controllers.Application.index(any = "none")
+GET         /apiList                      controllers.Application.api()
 
 
 #Patient Controller

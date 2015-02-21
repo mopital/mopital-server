@@ -12,6 +12,9 @@ object Application extends Controller {
     Ok(views.html.index()).withHeaders(("Access-Control-Allow-Origin","*"), ("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT"))
   }
 
+  def api() = Action {
+    Ok(views.html.main())
+  }
 
   /** resolve "any" into the corresponding HTML page URI */
   def getURI(any: String): String = any match {
