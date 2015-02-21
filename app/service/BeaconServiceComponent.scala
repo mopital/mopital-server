@@ -17,6 +17,7 @@ trait BeaconServiceComponent {
 
     def add(number:String, major: Int, minor: Int): Future[Boolean]
     def getAll(): Future[List[Beacon]]
+    def get(id: String): Future[Option[Beacon]]
   }
 
 }
@@ -35,6 +36,10 @@ trait BeaconServiceComponentImpl extends BeaconServiceComponent {
     }
     def getAll(): Future[List[Beacon]] = {
       beaconDao.getAll()
+    }
+
+    def get(id: String): Future[Option[Beacon]] = {
+      beaconDao.get(id)
     }
 
   }

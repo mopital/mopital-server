@@ -40,8 +40,3 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
     });
 }]);
-
-// the global controller
-app.controller("NewCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
-
-}]);

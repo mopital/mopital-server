@@ -1,9 +1,12 @@
 package dao
 
+import java.awt.print.Book
+
 import models.{Bed, Beacon, Patient}
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
+import views.html.play20.book
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -28,12 +31,15 @@ trait DaoComponent {
   trait BeaconDao {
     def add(beacon: Beacon): Future[Boolean]
     def getAll(): Future[List[Beacon]]
+    def get(id: String): Future[Option[Beacon]]
   }
 
   trait BedDao {
 
     def add(bed: Bed): Future[Boolean]
     def getAll(): Future[List[Bed]]
+    def updateBed(id:String, bed:Bed): Future[Boolean]
+    def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
   }
 
 }
@@ -49,10 +55,7 @@ trait DaoComponentImpl extends DaoComponent {
     def patientCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("patient")
 
     def get(id: String): Future[Option[Patient]] = {
-      Logger.debug("get-patient")
-      Future(Some(new Patient(Some(BSONObjectID.generate), "ahmet")))
-
-      //        bookCollection.find(byId(bookId), BSONDocument()).cursor[Book].headOption
+      patientCollection.find(byId(id), BSONDocument()).cursor[Patient].headOption
     }
 
     def add(patient: Patient): Future[Boolean] = {
@@ -68,7 +71,7 @@ trait DaoComponentImpl extends DaoComponent {
   }
 
 
-  class BeaconDaoImpl extends BeaconDao {
+  class BeaconDaoImpl extends BeaconDao with MongoOps{
 
     def beaconCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("beacon")
 
@@ -79,10 +82,13 @@ trait DaoComponentImpl extends DaoComponent {
     def getAll(): Future[List[Beacon]] = {
       beaconCollection.find(BSONDocument(), BSONDocument()).cursor[Beacon].collect[List](Int.MaxValue, true)
     }
+    def get(id: String): Future[Option[Beacon]] = {
+      beaconCollection.find(byId(id), BSONDocument()).cursor[Beacon].headOption
+    }
   }
 
 
-  class BedDaoImpl extends BedDao {
+  class BedDaoImpl extends BedDao with MongoOps{
 
     def bedCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("bed")
 
@@ -92,6 +98,14 @@ trait DaoComponentImpl extends DaoComponent {
 
     def getAll(): Future[List[Bed]] = {
       bedCollection.find(BSONDocument(), BSONDocument()).cursor[Bed].collect[List](Int.MaxValue, true)
+    }
+
+    def updateBed(id:String, bed:Bed): Future[Boolean] = {
+      bedCollection.update(byId(id), bed).map(lastError => !lastError.inError)
+    }
+
+    def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean] = {
+      bedCollection.update(byId(id), BSONDocument("$set" -> BSONDocument("beacon" -> beacon))).map(lastError => !lastError.inError)
     }
   }
 
