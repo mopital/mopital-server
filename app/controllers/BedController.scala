@@ -25,6 +25,20 @@ trait BedController extends Controller with DaoComponent with BedServiceComponen
     )
   }
 
+  def setBeaconToBed() = Action.async(parse.json) { request =>
+
+    val bedId = request.body.\("bed_id").as[String]
+    val beaconId = request.body.\("beacon_id").as[String]
+
+    bedService.updateBeacon(bedId, beaconId).map { result =>
+      result match {
+        case true => Ok(ResponseBase.success().toJson)
+        case _ => Ok(ResponseBase.error().toJson)
+      }
+    }
+
+  }
+
   def getAll() = Action.async {
     bedService.getAll().map(beds => Ok(ResponseListBed(ResponseBase.success(), beds).toJson))
   }
@@ -34,3 +48,4 @@ trait BedController extends Controller with DaoComponent with BedServiceComponen
 object BedController extends BedController
                       with DaoComponentImpl
                       with BedServiceComponentImpl
+                      with BeaconServiceComponentImpl
