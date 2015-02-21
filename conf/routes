@@ -19,6 +19,7 @@ GET         /api/allBeacons               controllers.BeaconController.getAll
 
 #Bed Controller
 POST        /api/add/bed                  controllers.BedController.add
+POST        /api/set/bed/beacon           controllers.BedController.setBeaconToBed
 GET         /api/allBeds                  controllers.BedController.getAll
 
 
