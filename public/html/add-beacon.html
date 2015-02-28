@@ -4,7 +4,7 @@
         <form name="addBeaconForm" role="form" class="form-horizontal">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label" for="title">Beacon Number</label>
+                    <label class="control-label" for="number">Beacon Number</label>
                     <input type="text" class="form-control" id="number" name="number" data-ng-model="beacon.number" placeholder="Number of The Beacon" required>
                     <span data-ng-show="addBeaconForm.title.$error.required" class="help-inline">Required</span>
                 </div>
@@ -24,7 +24,7 @@
                 <br/>
 
                 <button data-ng-click="go('/beacons')" data-ng-show="isActive('path')" class="btn btn-default">Cancel</button>
-                <button data-ng-click="addBeacon()" data-ng-disabled="addBookForm.$invalid" class="btn btn-success">Save</button>
+                <button data-ng-click="addBeacon()" data-ng-disabled="addBeaconForm.$invalid" class="btn btn-success">Save</button>
             </fieldset>
         </form>
     </div>
