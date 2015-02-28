@@ -16,7 +16,13 @@ var app = angular.module("app", ["ngResource", "ngRoute"])
         }).when("/edit/:id", {
             templateUrl: "/views/detail",
             controller: ""
-        }).otherwise({
+        }).when("/beacons", {
+            templateUrl: "/assets/html/beacon-list.html",
+            controller: "AppCtrl"
+          }).when("/addBeacon", {
+                        templateUrl: "/assets/html/add-beacon.html",
+                        controller: "beaconController"
+         }).otherwise({
             redirectTo: "/"
         });
     }
@@ -39,4 +45,25 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
         $scope.patients = response.data;
 
     });
+
+    var BeaconList = $resource(apiUrl + "/allBeacons"); // a RESTful-capable resource object
+    BeaconList.get(function(response) {
+        console.log(response);
+        $scope.beacons = response.data;
+
+    });
 }]);
+
+
+app.controller("beaconController", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
+
+
+   $scope.addBeacon = function() {
+    console.log($scope.beacon)
+    var CreateBookFromRequested = $resource(apiUrl + "/add/beacon")
+    CreateBookFromRequested.save($scope.beacon, function(response) {
+        //if($rootScope.checkError(response))
+    });
+}
+}
+]);
