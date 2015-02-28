@@ -6,16 +6,16 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
-case class Beacon(val id: Option[BSONObjectID], val number: String, val major: Int, val minor: Int) {
+case class Beacon(val id: Option[BSONObjectID], val uuid: String, val major: Int, val minor: Int) {
 
   def this() {
-    this(Option(BSONObjectID.generate), "no_number", 100, 100)
+    this(Option(BSONObjectID.generate), "no_uuid", 100, 100)
   }
 
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
-      "number" -> Json.toJson(number),
+      "uuid" -> Json.toJson(uuid),
       "major" -> Json.toJson(major),
       "minor" -> Json.toJson(minor)
     ))
@@ -30,7 +30,7 @@ object Beacon {
     def write(beacon: Beacon): BSONDocument =
       BSONDocument(
         "_id" -> beacon.id.getOrElse(BSONObjectID.generate),
-        "number" -> beacon.number,
+        "uuid" -> beacon.uuid,
         "major" -> beacon.major,
         "minor" -> beacon.minor)
   }
@@ -40,7 +40,7 @@ object Beacon {
     def read(doc: BSONDocument): Beacon =
       Beacon(
         doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[String]("number").get,
+        doc.getAs[String]("uuid").get,
         doc.getAs[Int]("major").get,
         doc.getAs[Int]("minor").get
       )

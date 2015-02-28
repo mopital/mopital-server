@@ -21,7 +21,7 @@ trait PatientServiceComponent {
     def add(bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]): Future[Boolean]
     def get(id: String): Future[Option[Patient]]
     def getAll(): Future[List[Patient]]
-    def getPatientByBeaconNumber(beaconNumber: String): Future[Option[Patient]]
+    def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]]
   }
 }
 
@@ -45,8 +45,8 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
       patientDao.get(id)
     }
 
-    def getPatientByBeaconNumber(beaconNumber: String): Future[Option[Patient]] = {
-      bedDao.getByBeaconNumber(beaconNumber).flatMap {
+    def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]] = {
+      bedDao.getByBeaconNumber(uuid).flatMap {
         case Some(bed) =>
           //check result and generate appropriate response
           patientDao.getPatientByBedNumber(bed.bed_number).map(result => result)

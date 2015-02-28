@@ -41,10 +41,10 @@ trait PatientController extends Controller with DaoComponent with PatientService
   }
 
 
-  def getPatientByBeaconNumber(beaconNumber: String) = Action.async {
+  def getPatientByBeaconNumber(uuid: String) = Action.async {
 //    val patient = new Patient(Option(BSONObjectID.generate), 12, name = "alpercem", age = 12, weight = 71.2, height = 1.79, bloodType = Option("artı"), fileNo = Option("1232"), admissionDate = Option("dsfjd"), treatments = List())
 
-    patientService.getPatientByBeaconNumber(beaconNumber).map( result =>
+    patientService.getPatientByBeaconUUID(uuid).map( result =>
 
         result match  {
 

@@ -43,7 +43,7 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[2] = {};
     apiList[2].type = "POST";
     apiList[2].path = "/api/add/beacon";
-    apiList[2].params = "number:String, major:Int, minor:Int";
+    apiList[2].params = "uuid:String, major:Int, minor:Int";
 
 
     apiList[3] = {};
@@ -71,8 +71,8 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
     apiList[7] = {};
     apiList[7].type = "GET";
-    apiList[7].path = "/api/beacon/get/patient/:beaconNumber";
-    apiList[7].params = "beaconNumber:String";
+    apiList[7].path = "/api/beacon/get/patient/";
+    apiList[7].params = "uuid:String";
 
 
 
