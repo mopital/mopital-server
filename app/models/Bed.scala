@@ -6,11 +6,11 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
-case class Bed(id: Option[BSONObjectID], bed_no: Int, beacon: Beacon) {
+case class Bed(id: Option[BSONObjectID], bed_number: Int, beacon: Beacon) {
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
-      "bed_no" -> Json.toJson(bed_no),
+      "bed_number" -> Json.toJson(bed_number),
       "beacon" -> Json.toJson(beacon)
     ))
   }
@@ -24,7 +24,7 @@ object Bed {
     def write(bed: Bed): BSONDocument =
       BSONDocument(
         "_id" -> bed.id.getOrElse(BSONObjectID.generate),
-        "number" -> bed.bed_no,
+        "bed_number" -> bed.bed_number,
         "beacon" -> bed.beacon)
   }
 
@@ -33,7 +33,7 @@ object Bed {
     def read(doc: BSONDocument): Bed =
       Bed(
         doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[Int]("number").get,
+        doc.getAs[Int]("bed_number").get,
         doc.getAs[Beacon]("beacon").get
       )
   }

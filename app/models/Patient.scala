@@ -7,11 +7,19 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 05/02/15.
  */
-case class Patient(id: Option[BSONObjectID], name: String) {
+case class Patient(id: Option[BSONObjectID], bed_number: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String], treatments: List[Treatment]) {
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
-      "name" -> Json.toJson(name)
+      "bed_number" -> Json.toJson(bed_number),
+      "name" -> Json.toJson(name),
+      "age" -> Json.toJson(age),
+      "weight" -> Json.toJson(weight),
+      "height" -> Json.toJson(height),
+      "blood_type" -> Json.toJson(bloodType),
+      "file_no" -> Json.toJson(fileNo),
+      "admission_date" -> Json.toJson(admissionDate),
+      "treatments" -> JsArray(treatments.map(p => p.toJson()))
     ))
   }
 
@@ -25,7 +33,16 @@ object Patient {
     def write(patient: Patient): BSONDocument =
       BSONDocument(
         "_id" -> patient.id.getOrElse(BSONObjectID.generate),
-        "name" -> patient.name)
+        "bed_number" -> patient.bed_number,
+        "name" -> patient.name,
+        "age" -> patient.age,
+        "weight" -> patient.weight,
+        "height" -> patient.height,
+        "blood_type" -> patient.bloodType,
+        "fileNo" -> patient.fileNo,
+        "admission_date" -> patient.admissionDate,
+        "treatments" -> patient.treatments
+      )
   }
 
   /** deserialize a Celebrity from a BSON */
@@ -33,7 +50,17 @@ object Patient {
     def read(doc: BSONDocument): Patient =
       Patient(
         doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[String]("name").get)
+        doc.getAs[Int]("bed_number").get,
+        doc.getAs[String]("name").get,
+        doc.getAs[Int]("age").get,
+        doc.getAs[Double]("weight").get,
+        doc.getAs[Double]("height").get,
+        doc.getAs[String]("blood_type"),
+        doc.getAs[String]("fileNo"),
+        doc.getAs[String]("admission_date"),
+        doc.getAs[List[Treatment]]("treatments").get
+
+      )
   }
 
 }

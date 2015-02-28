@@ -60,6 +60,14 @@ case class ResponseListBed(result: ResponseBase, data:List[Bed]) {
 object ResponseListBed
 
 
+case class ResponsePatient(result: ResponseBase, data:Patient) {
+
+  def toJson: JsObject = {
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> data.toJson()))
+  }
+}
+object ResponsePatient
+
 
 
 

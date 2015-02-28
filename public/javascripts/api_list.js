@@ -29,9 +29,9 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
     var apiList = [];
     apiList[0] = {};
-    apiList[0].type = "GET";
-    apiList[0].path = "/api/add/patient/:name ";
-    apiList[0].params = "name:String"
+    apiList[0].type = "POST";
+    apiList[0].path = "/api/add/patient/";
+    apiList[0].params = "bed_number: Int, name: String, age: Int, weight: Double, height:Double, blood_type: Option[String], file_no: Option[String], admission_date: Option[String]"
 
 
     apiList[1] = {};
@@ -68,6 +68,13 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[6].type = "GET";
     apiList[6].path = "/api/allBeds";
     apiList[6].params = "none";
+
+    apiList[7] = {};
+    apiList[7].type = "GET";
+    apiList[7].path = "/api/beacon/get/patient/:beaconNumber";
+    apiList[7].params = "beaconNumber:String";
+
+
 
     $scope.methods = apiList;
 

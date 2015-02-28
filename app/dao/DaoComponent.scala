@@ -25,6 +25,7 @@ trait DaoComponent {
     def get(id: String): Future[Option[Patient]]
     def add(patient: Patient): Future[Boolean]
     def getAll(): Future[List[Patient]]
+    def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]]
 
   }
 
@@ -40,6 +41,7 @@ trait DaoComponent {
     def getAll(): Future[List[Bed]]
     def updateBed(id:String, bed:Bed): Future[Boolean]
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
+    def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]]
   }
 
 }
@@ -67,6 +69,11 @@ trait DaoComponentImpl extends DaoComponent {
 
     def getAll(): Future[List[Patient]] = {
         patientCollection.find(BSONDocument(), BSONDocument()).cursor[Patient].collect[List](Int.MaxValue, true)
+    }
+
+
+    def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]] = {
+      patientCollection.find(BSONDocument("bed_number" -> bedNumber), BSONDocument()).cursor[Patient].headOption
     }
   }
 
@@ -107,6 +114,10 @@ trait DaoComponentImpl extends DaoComponent {
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean] = {
       bedCollection.update(byId(id), BSONDocument("$set" -> BSONDocument("beacon" -> beacon))).map(lastError => !lastError.inError)
     }
-  }
 
+    def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]] = {
+      val query = BSONDocument( "beacon.number" -> beaconNumber)
+      bedCollection.find(query, BSONDocument()).cursor[Bed].headOption
+    }
+  }
 }
