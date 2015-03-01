@@ -116,7 +116,7 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]] = {
-      val query = BSONDocument( "beacon.number" -> beaconNumber)
+      val query = BSONDocument( "beacon.uuid" -> beaconNumber)
       bedCollection.find(query, BSONDocument()).cursor[Bed].headOption
     }
   }
