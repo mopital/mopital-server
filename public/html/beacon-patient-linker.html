@@ -1,0 +1,57 @@
+<div class="dynamic_container " xmlns="http://www.w3.org/1999/html">
+    <table>
+        <th><h4>Beacons</h4></th>
+        <tr>
+            <th>Id</th>
+            <th>Number</th>
+            <th>Major</th>
+            <th>Minor</th>
+        </tr>
+        <tr ng-repeat="beacon in beacons">
+            <td>{{beacon.id}}</td>
+            <td>{{beacon.number}}</td>
+            <td>{{beacon.major}}</td>
+            <td>{{beacon.minor}}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="dynamic_container" >
+<table>
+    <th><h4>Patients</h4></th>
+    <tr>
+
+        <th>Id</th>
+        <th> Name</th>
+    </tr>
+    <tr ng-repeat="patient in patients">
+        <td>{{patient.id}}</td>
+        <td>{{patient.name}}</td>
+    </tr>
+</table>
+</div>
+
+    <div class="col-lg-6 col-lg-offset-3">
+
+        <form name="linkBeaconPatientForm" role="form" class="form-horizontal">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="beacon_id">Beacon ID</label>
+                    <input type="text" class="form-control" id="beacon_id" name="beacon_id" data-ng-model="linker.beacon_id" placeholder="Beacon ID" required>
+                    <span data-ng-show="linkBeaconPatientForm.title.$error.required" class="help-inline">Required</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="bed_id">Patient ID</label>
+                    <input type="text" class="form-control" id="bed_id" name="bed_id" data-ng-model="linker.bed_id" placeholder="Patient ID" required>
+                    <span data-ng-show="linkBeaconPatientForm.author.$error.required" class="help-inline">Required</span>
+                </div>
+
+                <br/>
+
+                <button data-ng-click="go('/beacons')" data-ng-show="isActive('path')" class="btn btn-default">Cancel</button>
+                <button data-ng-click="linkBeaconWithPatient()" data-ng-disabled="addBeaconForm.$invalid" class="btn btn-success">Save</button>
+            </fieldset>
+        </form>
+    </div>
+

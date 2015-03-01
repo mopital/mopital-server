@@ -17,6 +17,9 @@ object Mongo {
 
 //  val connection = driver.connection( List( "localhost" ) )
 //  val db = connection("mopital")
+
+//  val connection = driver.connection( List( "localhost" ) )
+//  val db = connection("mopital")
 //
 // HEROKU Databse Connection
   val uri = "mongodb://mopital:mopital@ds043991.mongolab.com:43991/heroku_app34029761"
