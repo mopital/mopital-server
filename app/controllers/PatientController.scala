@@ -27,13 +27,19 @@ trait PatientController extends Controller with DaoComponent with PatientService
     val bloodType = request.body.\("blood_type").asOpt[String]
     val admissionDate = request.body.\("admission_date").asOpt[String]
 
-    patientService.add(bedNumber, name, age, weight, height, bloodType, fileNo, admissionDate).map(result =>
+    patientService.add(bedNumber, name, age, weight, height, bloodType, fileNo, admissionDate).map {
+      case true => Ok(ResponseBase.success().toJson)
+      case _ => Ok(ResponseBase.error().toJson)
+    }
+  }
 
-      result match {
-        case true => Ok(ResponseBase.success().toJson)
-        case _ => Ok(ResponseBase.error().toJson)
-      }
-    )
+  def get(id: String) = Action.async {
+    patientService.get(id).map {
+
+      case Some(patient) =>
+        Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
+      case _ => Ok(ResponseBase.error().toJson)
+    }
   }
 
   def allPatients() = Action.async {
@@ -42,17 +48,13 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
 
   def getPatientByBeaconNumber(uuid: String) = Action.async {
-//    val patient = new Patient(Option(BSONObjectID.generate), 12, name = "alpercem", age = 12, weight = 71.2, height = 1.79, bloodType = Option("artı"), fileNo = Option("1232"), admissionDate = Option("dsfjd"), treatments = List())
 
-    patientService.getPatientByBeaconUUID(uuid).map( result =>
+    patientService.getPatientByBeaconUUID(uuid).map {
 
-        result match  {
-
-          case Some(patient) =>
-            Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
-          case _ => Ok(ResponseBase.error().toJson)
-        }
-    )
+      case Some(patient) =>
+        Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
+      case _ => Ok(ResponseBase.error().toJson)
+    }
   }
 
 }

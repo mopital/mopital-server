@@ -260,7 +260,7 @@ ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
   //
   // This delay sucks and makes mobile apps feel unresponsive.
   // So we detect touchstart, touchmove, touchcancel and touchend ourselves and determine when
-  // the user has tapped on something.
+  // the patient has tapped on something.
   //
   // What happens when the browser then generates a click event?
   // The browser, of course, also detects the tap and fires a click after a delay. This results in
@@ -273,7 +273,7 @@ ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
   // - element's touchstart: Starts a touch
   // (- touchmove or touchcancel ends the touch, no click follows)
   // - element's touchend: Determines if the tap is valid (didn't move too far away, didn't hold
-  //   too long) and fires the user's tap handler. The touchend also calls preventGhostClick().
+  //   too long) and fires the patient's tap handler. The touchend also calls preventGhostClick().
   // - preventGhostClick() removes the allowable region the global touchstart created.
   // - The browser generates a click event.
   // - The global click handler catches the click, and checks whether it was in an allowable region.
@@ -284,7 +284,7 @@ ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
   // This is an ugly, terrible hack!
   // Yeah, tell me about it. The alternatives are using the slow click events, or making our users
   // deal with the ghost clicks, so I consider this the least of evils. Fortunately Angular
-  // encapsulates this ugly logic away from the user.
+  // encapsulates this ugly logic away from the patient.
   //
   // Why not just put click handlers on the element?
   // We do that too, just to be sure. If the tap event caused the DOM to change,

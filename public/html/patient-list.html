@@ -3,11 +3,15 @@
         <thead>
             <th>Id</th>
             <th> Name</th>
+            <th> Bed Number</th>
+            <th> Detail</th>
         </thead>
         <tbody>
             <tr ng-repeat="patient in patients">
                 <td>{{patient.id}}</td>
                 <td>{{patient.name}}</td>
+                <td>{{patient.bed_number}}</td>
+                <td><a href="#" data-ng-click="onClickDetail('/patient/' + patient.id)" class="btn btn-primary">Detail</a></td>
             </tr>
         </tbody>
     </table>

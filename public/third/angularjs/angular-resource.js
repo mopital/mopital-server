@@ -91,7 +91,7 @@ function shallowClearAndCopy(src, dst) {
  * ```
  *
  * @param {string} url A parametrized URL template with parameters prefixed by `:` as in
- *   `/user/:username`. If you are using a URL with a port number (e.g.
+ *   `/patient/:username`. If you are using a URL with a port number (e.g.
  *   `http://example.com:8080/api`), it will be respected.
  *
  *   If you are using a url with a suffix, just add the suffix, like this:
@@ -191,10 +191,10 @@ function shallowClearAndCopy(src, dst) {
  *   as  methods with the `$` prefix. This allows you to easily perform CRUD operations (create,
  *   read, update, delete) on server-side data like this:
  *   ```js
- *   var User = $resource('/user/:userId', {userId:'@id'});
- *   var user = User.get({userId:123}, function() {
- *     user.abc = true;
- *     user.$save();
+ *   var User = $resource('/patient/:userId', {userId:'@id'});
+ *   var patient = User.get({userId:123}, function() {
+ *     patient.abc = true;
+ *     patient.$save();
  *   });
  *   ```
  *
@@ -245,14 +245,14 @@ function shallowClearAndCopy(src, dst) {
  *
  * ```js
      // Define CreditCard class
-     var CreditCard = $resource('/user/:userId/card/:cardId',
+     var CreditCard = $resource('/patient/:userId/card/:cardId',
       {userId:123, cardId:'@id'}, {
        charge: {method:'POST', params:{charge:true}}
       });
 
      // We can retrieve a collection from the server
      var cards = CreditCard.query(function() {
-       // GET: /user/123/card
+       // GET: /patient/123/card
        // server returns: [ {id:456, number:'1234', name:'Smith'} ];
 
        var card = cards[0];
@@ -261,19 +261,19 @@ function shallowClearAndCopy(src, dst) {
        card.name = "J. Smith";
        // non GET methods are mapped onto the instances
        card.$save();
-       // POST: /user/123/card/456 {id:456, number:'1234', name:'J. Smith'}
+       // POST: /patient/123/card/456 {id:456, number:'1234', name:'J. Smith'}
        // server returns: {id:456, number:'1234', name: 'J. Smith'};
 
        // our custom method is mapped as well.
        card.$charge({amount:9.99});
-       // POST: /user/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
+       // POST: /patient/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
      });
 
      // we can create an instance as well
      var newCard = new CreditCard({number:'0123'});
      newCard.name = "Mike Smith";
      newCard.$save();
-     // POST: /user/123/card {number:'0123', name:'Mike Smith'}
+     // POST: /patient/123/card {number:'0123', name:'Mike Smith'}
      // server returns: {id:789, number:'0123', name: 'Mike Smith'};
      expect(newCard.id).toEqual(789);
  * ```
@@ -288,10 +288,10 @@ function shallowClearAndCopy(src, dst) {
  * operations (create, read, update, delete) on server-side data.
 
    ```js
-     var User = $resource('/user/:userId', {userId:'@id'});
-     User.get({userId:123}, function(user) {
-       user.abc = true;
-       user.$save();
+     var User = $resource('/patient/:userId', {userId:'@id'});
+     User.get({userId:123}, function(patient) {
+       patient.abc = true;
+       patient.$save();
      });
    ```
  *
@@ -300,11 +300,11 @@ function shallowClearAndCopy(src, dst) {
  * could rewrite the above example and get access to http headers as:
  *
    ```js
-     var User = $resource('/user/:userId', {userId:'@id'});
+     var User = $resource('/patient/:userId', {userId:'@id'});
      User.get({userId:123}, function(u, getResponseHeaders){
        u.abc = true;
        u.$save(function(u, putResponseHeaders) {
-         //u => saved user object
+         //u => saved patient object
          //putResponseHeaders => $http header getter
        });
      });
@@ -313,10 +313,10 @@ function shallowClearAndCopy(src, dst) {
  * You can also access the raw `$http` promise via the `$promise` property on the object returned
  *
    ```
-     var User = $resource('/user/:userId', {userId:'@id'});
+     var User = $resource('/patient/:userId', {userId:'@id'});
      User.get({userId:123})
-         .$promise.then(function(user) {
-           $scope.user = user;
+         .$promise.then(function(patient) {
+           $scope.patient = patient;
          });
    ```
 

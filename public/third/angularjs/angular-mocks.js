@@ -1016,7 +1016,7 @@ angular.mock.dump = function(object) {
 
     $http.get('/auth.py').success(function(data, status, headers) {
       authToken = headers('A-Token');
-      $scope.user = data;
+      $scope.patient = data;
     });
 
     $scope.saveMessage = function(message) {

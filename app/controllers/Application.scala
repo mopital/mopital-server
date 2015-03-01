@@ -16,6 +16,10 @@ object Application extends Controller {
     Ok(views.html.main())
   }
 
+  def user(id: String) = Action {
+    Ok(views.html.patient())
+  }
+
   /** resolve "any" into the corresponding HTML page URI */
   def getURI(any: String): String = any match {
     case "patient-list" => "/public/html/patient-list.html"

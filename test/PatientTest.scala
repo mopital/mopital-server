@@ -19,7 +19,7 @@ class PatientTest extends Specification {
   val patientServiceComponentTest = new PatientServiceComponentTest
 
   "PatientServiceComponent #getUsers" should {
-    "return user" in {
+    "return patient" in {
 
       val fake = FakeApplication()
 

@@ -66,6 +66,11 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
     });
 
+
+    $scope.onClickDetail = function(detailUrl) {
+        window.location = detailUrl;
+    };
+
     $scope.isActive = function(viewLocation) {
 
         var active = false;

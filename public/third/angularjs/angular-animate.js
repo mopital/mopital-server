@@ -354,7 +354,7 @@
  * ### Applying Directive-specific Styles to an Animation
  * In some cases a directive or service may want to provide `$animate` with extra details that the animation will
  * include into its animation. Let's say for example we wanted to render an animation that animates an element
- * towards the mouse coordinates as to where the user clicked last. By collecting the X/Y coordinates of the click
+ * towards the mouse coordinates as to where the patient clicked last. By collecting the X/Y coordinates of the click
  * (via the event parameter) we can set the `top` and `left` styles into an object and pass that into our function
  * call to `$animate.addClass`.
  *
