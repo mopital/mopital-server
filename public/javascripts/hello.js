@@ -43,23 +43,33 @@
         ]);
 
     // the global controller
-    app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
+app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
 
 
-        var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
-        PatientList.get(function(response) {
-            $scope.patients = response.data;
-
-        });
-
-        var BeaconList = $resource(apiUrl + "/allBeacons"); // a RESTful-capable resource object
-        BeaconList.get(function(response) {
-            console.log(response);
-            $scope.beacons = response.data;
+    var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
+    PatientList.get(function(response) {
+        $scope.patients = response.data;
 
     });
-}
-]);
+
+    var BeaconList = $resource(apiUrl + "/allBeacons"); // a RESTful-capable resource object
+    BeaconList.get(function(response) {
+        console.log(response);
+        $scope.beacons = response.data;
+
+    });
+
+    $scope.isActive = function(viewLocation) {
+
+        var active = false;
+
+        if(viewLocation === $location.path()){
+            active = true;
+        }
+
+        return active;
+    };
+}]);
 
 
     app.controller("beaconController", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
@@ -80,7 +90,7 @@
 
        $scope.addPatient = function() {
         console.log($scope.patient)
-        var CreatePatientFromRequested = $resource(apiUrl + "add/patient/" + $scope.patient.name)
+        var CreatePatientFromRequested = $resource(apiUrl + "/add/patient")
         CreatePatientFromRequested.save($scope.patient, function(response) {
             //if($rootScope.checkError(response))
     });

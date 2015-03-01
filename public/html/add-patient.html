@@ -5,7 +5,7 @@
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="bed_number">Bed Number</label>
-                    <input type="text" class="form-control" id="bed_number" name="bed_number" data-ng-model="patient.bed_number" placeholder="Bed Number" required>
+                    <input type="number" class="form-control" id="bed_number" name="bed_number" data-ng-model="patient.bed_number" placeholder="Bed Number" required>
                     <span data-ng-show="addPatientForm.title.$error.required" class="help-inline">Required</span>
                 </div>
 
@@ -38,7 +38,7 @@
 
                 <div class="control-group">
                     <label class="control-label" for="fileNo">File No</label>
-                    <input type="number" class="form-control" id="fileNo" name="fileNo" data-ng-model="patient.fileNo" placeholder="File Number" required>
+                    <input type="number" class="form-control" id="fileNo" name="fileNo" data-ng-model="patient.file_no" placeholder="File Number" required>
                     <span data-ng-show="addPatientForm.author.$error.required" class="help-inline">Required</span>
                 </div>
 
