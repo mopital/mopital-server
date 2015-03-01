@@ -10,7 +10,7 @@ GET         /apiList                      controllers.Application.api()
 #Patient Controller
 POST        /api/add/patient              controllers.PatientController.addPatient
 GET         /api/allPatients              controllers.PatientController.allPatients
-GET         /api/beacon/get/patient/:uuid   controllers.PatientController.getPatientByBeaconNumber(uuid: String)
+GET         /api/beacon/get/patient/:uuid controllers.PatientController.getPatientByBeaconNumber(uuid: String)
 
 
 #Beacon Controller

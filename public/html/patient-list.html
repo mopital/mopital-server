@@ -1,13 +1,15 @@
 <div class="dynamic_container">
-    <table>
-        <tr>
+    <table class="table">
+        <thead>
             <th>Id</th>
             <th> Name</th>
-        </tr>
-        <tr ng-repeat="patient in patients">
-            <td>{{patient.id}}</td>
-            <td>{{patient.name}}</td>
-        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="patient in patients">
+                <td>{{patient.id}}</td>
+                <td>{{patient.name}}</td>
+            </tr>
+        </tbody>
     </table>
 
 </div>

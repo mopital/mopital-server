@@ -2,35 +2,40 @@
 
         <div class="row">
             <div class="col-xs-6">
-                <table>
-                    <th><h4>Beacons</h4></th>
-                    <tr>
+                <h4>Beacons</h4>
+                <table class="table">
+                    <thead>
                         <th>Id</th>
                         <th>Number</th>
                         <th>Major</th>
                         <th>Minor</th>
-                    </tr>
-                    <tr ng-repeat="beacon in beacons">
-                        <td>{{beacon.id}}</td>
-                        <td>{{beacon.number}}</td>
-                        <td>{{beacon.major}}</td>
-                        <td>{{beacon.minor}}</td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="beacon in beacons">
+                            <td>{{beacon.id}}</td>
+                            <td>{{beacon.uuid}}</td>
+                            <td>{{beacon.major}}</td>
+                            <td>{{beacon.minor}}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div class="col-xs-6">
 
-                <table>
-                    <th><h4>Patients</h4></th>
-                    <tr>
-
+                <h4>Beds</h4>
+                <table class="table">
+                    <thead>
                         <th>Id</th>
-                        <th> Name</th>
+                        <th>Bed Number</th>
+                    </thead>
+                    <tbody>
+
                     </tr>
-                    <tr ng-repeat="patient in patients">
-                        <td>{{patient.id}}</td>
-                        <td>{{patient.name}}</td>
-                    </tr>
+                        <tr ng-repeat="bed in beds">
+                            <td>{{bed.id}}</td>
+                            <td>{{bed.bed_number}}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
