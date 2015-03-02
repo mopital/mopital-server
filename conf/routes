@@ -10,6 +10,7 @@ GET         /patient/:id                  controllers.Application.user(id)
 
 
 #Patient Controller
+GET         /api/ping                     controllers.PingPong.ping
 POST        /api/add/patient              controllers.PatientController.addPatient
 GET         /api/get/patient/:id          controllers.PatientController.get(id: String)
 GET         /api/allPatients              controllers.PatientController.allPatients
