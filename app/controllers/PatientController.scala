@@ -1,10 +1,10 @@
 package controllers
 
 import dao._
-import models.{Treatment, Patient}
+import models.{AddTreatmentRequest, AddPatientRequest, Treatment, Patient}
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import reactivemongo.bson.BSONObjectID
 import service.{PatientServiceComponent, PatientServiceComponentImpl}
@@ -17,25 +17,23 @@ import scala.concurrent.Future
 trait PatientController extends Controller with DaoComponent with PatientServiceComponent{
 
   def addPatient() = Action.async(parse.json) { request =>
+    request.body.validate[AddPatientRequest].fold(
+      valid = { addPatientRequest =>
 
-    val bedNumber = request.body.\("bed_number").as[Int]
-    val name = request.body.\("name").as[String]
-    val age = request.body.\("age").as[Int]
-    val weight = request.body.\("weight").as[Double]
-    val height = request.body.\("height").as[Double]
-    val fileNo = request.body.\("file_no").asOpt[String]
-    val bloodType = request.body.\("blood_type").asOpt[String]
-    val admissionDate = request.body.\("admission_date").asOpt[String]
+        patientService.add(addPatientRequest).map { result =>
+          getResponseFromResult(result)
+        }
 
-    patientService.add(bedNumber, name, age, weight, height, bloodType, fileNo, admissionDate).map {
-      case true => Ok(ResponseBase.success().toJson)
-      case _ => Ok(ResponseBase.error().toJson)
-    }
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
+
+    )
   }
 
   def get(id: String) = Action.async {
     patientService.get(id).map {
-
       case Some(patient) =>
         Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
       case _ => Ok(ResponseBase.error().toJson)
@@ -47,13 +45,36 @@ trait PatientController extends Controller with DaoComponent with PatientService
   }
 
 
-  def getPatientByBeaconNumber(uuid: String) = Action.async {
+  def getPatientByBeaconUUID(uuid: String) = Action.async {
 
     patientService.getPatientByBeaconUUID(uuid).map {
-
       case Some(patient) =>
         Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
       case _ => Ok(ResponseBase.error().toJson)
+    }
+  }
+
+  def addTreatment() = Action.async(parse.json) { request =>
+
+      request.body.validate[AddTreatmentRequest].fold(
+        valid = { addTreatmentRequest =>
+
+          patientService.addTreatment(addTreatmentRequest).map { result =>
+            getResponseFromResult(result)
+          }
+        },
+        invalid = { e => Logger.error(s"Add Patient Controller] $e");
+          Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        }
+
+      )
+  }
+
+  def getResponseFromResult(result: Boolean): Result = {
+    if(result) {
+      Ok(ResponseBase.success().toResultJson)
+    } else {
+      Ok(ResponseBase.error().toResultJson)
     }
   }
 

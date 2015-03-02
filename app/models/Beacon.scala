@@ -12,6 +12,14 @@ case class Beacon(val id: Option[BSONObjectID], val uuid: String, val major: Int
     this(Option(BSONObjectID.generate), "no_uuid", 100, 100)
   }
 
+  def this(addBeaconRequest: AddBeaconRequest) {
+    this(Option(BSONObjectID.generate),
+      addBeaconRequest.beaconUUID,
+      addBeaconRequest.major,
+      addBeaconRequest.minor
+    )
+  }
+
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),

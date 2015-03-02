@@ -1,11 +1,15 @@
 package controllers
 
 import dao.{ResponseListBeacon, ResponseBase, DaoComponentImpl, DaoComponent}
-import play.api.mvc.{Action, Controller}
+import models.AddBeaconRequest
+import play.api.Logger
+import play.api.mvc.{Result, Action, Controller}
 import service.{BeaconServiceComponentImpl, BeaconServiceComponent}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
+
+import scala.concurrent.Future
 
 /**
  * Created by ahmetkucuk on 18/02/15.
@@ -15,24 +19,28 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
 
   def add() = Action.async(parse.json) { request =>
 
-    val number: String = request.body.\("number").as[String]
-    val major: Int = request.body.\("major").as[Int]
-    val minor: Int = request.body.\("minor").as[Int]
+    request.body.validate[AddBeaconRequest].fold(
 
-    beaconService.add(number, major, minor).map(result =>
+      valid = { addBeaconRequest =>
+        beaconService.add(addBeaconRequest).map( result => getResponseFromResult(result))
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
 
-        result match {
-
-          case true =>
-            Ok(ResponseBase.success().toJson)
-          case _=>
-            Ok(ResponseBase.error().toJson)
-        }
     )
   }
 
   def getAll() = Action.async {
     beaconService.getAll().map(beacons => Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson))
+  }
+
+  def getResponseFromResult(result: Boolean): Result = {
+    if(result) {
+      Ok(ResponseBase.success().toResultJson)
+    } else {
+      Ok(ResponseBase.error().toResultJson)
+    }
   }
 
 }

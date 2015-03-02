@@ -7,11 +7,25 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 05/02/15.
  */
-case class Patient(id: Option[BSONObjectID], bed_number: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String], treatments: List[Treatment]) {
+case class Patient(id: Option[BSONObjectID], bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String], treatments: List[Treatment]) {
+
+  def this(addPatientRequest: AddPatientRequest) {
+    this(Option(BSONObjectID.generate),
+      addPatientRequest.bedNumber,
+      addPatientRequest.name,
+      addPatientRequest.age,
+      addPatientRequest.weight,
+      addPatientRequest.height,
+      addPatientRequest.bloodType,
+      addPatientRequest.fileNo,
+      addPatientRequest.admissionDate,
+      List()
+    )
+  }
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
-      "bed_number" -> Json.toJson(bed_number),
+      "bed_number" -> Json.toJson(bedNumber),
       "name" -> Json.toJson(name),
       "age" -> Json.toJson(age),
       "weight" -> Json.toJson(weight),
@@ -33,7 +47,7 @@ object Patient {
     def write(patient: Patient): BSONDocument =
       BSONDocument(
         "_id" -> patient.id.getOrElse(BSONObjectID.generate),
-        "bed_number" -> patient.bed_number,
+        "bed_number" -> patient.bedNumber,
         "name" -> patient.name,
         "age" -> patient.age,
         "weight" -> patient.weight,

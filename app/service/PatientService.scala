@@ -1,7 +1,7 @@
 package service
 
 import dao.DaoComponent
-import models.{Treatment, Patient}
+import models.{AddTreatmentRequest, AddPatientRequest, Treatment, Patient}
 import play.api.Logger
 import reactivemongo.bson.BSONObjectID
 
@@ -18,10 +18,11 @@ trait PatientServiceComponent {
 
   trait PatientService {
 
-    def add(bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]): Future[Boolean]
+    def add(addPatientRequest: AddPatientRequest): Future[Boolean]
     def get(id: String): Future[Option[Patient]]
     def getAll(): Future[List[Patient]]
     def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]]
+    def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean]
   }
 }
 
@@ -33,8 +34,8 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
 
   class PatientServiceImpl extends PatientService {
 
-    def add(bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]): Future[Boolean] = {
-      patientDao.add(new Patient(Some(BSONObjectID.generate), bedNumber, name, age, weight, height, bloodType, fileNo, admissionDate, List()))
+    def add(addPatientRequest: AddPatientRequest): Future[Boolean] = {
+      patientDao.add(new Patient(addPatientRequest))
     }
 
     def getAll(): Future[List[Patient]] = {
@@ -54,6 +55,11 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
           Logger.debug("bed_number11")
           null
       }
+    }
+
+
+    def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean] = {
+      patientDao.insertTreatment(addTreatmentRequest.patientId, new Treatment(addTreatmentRequest))
     }
   }
 }

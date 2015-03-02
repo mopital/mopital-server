@@ -9,6 +9,18 @@ import play.modules.reactivemongo.json.BSONFormats._
  */
 case class Treatment(id: Option[BSONObjectID], date: Option[String], time: Option[String], tension: Option[String], temperature: Option[String], pulse: Option[String], respiration: Option[String], pain: Option[String], definition: Option[String]) {
 
+  def this(addTreatmentRequest: AddTreatmentRequest) {
+    this(Option(BSONObjectID.generate),
+      addTreatmentRequest.date,
+      addTreatmentRequest.time,
+      addTreatmentRequest.tension,
+      addTreatmentRequest.temperature,
+      addTreatmentRequest.pulse,
+      addTreatmentRequest.respiration,
+      addTreatmentRequest.pain,
+      addTreatmentRequest.definition
+    )
+  }
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),

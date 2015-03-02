@@ -4,8 +4,8 @@
         <form name="addBeaconForm" role="form" class="form-horizontal">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label" for="number">Beacon Number</label>
-                    <input type="text" class="form-control" id="number" name="number" data-ng-model="beacon.number" placeholder="Number of The Beacon" required>
+                    <label class="control-label" for="number">Beacon UUID</label>
+                    <input type="text" class="form-control" id="number" name="number" data-ng-model="beacon.beaconUUID" placeholder="UUID of The Beacon" required>
                     <span data-ng-show="addBeaconForm.title.$error.required" class="help-inline">Required</span>
                 </div>
 

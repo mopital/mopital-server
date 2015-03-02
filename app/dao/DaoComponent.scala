@@ -2,7 +2,7 @@ package dao
 
 import java.awt.print.Book
 
-import models.{Bed, Beacon, Patient}
+import models.{Treatment, Bed, Beacon, Patient}
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
@@ -26,6 +26,7 @@ trait DaoComponent {
     def add(patient: Patient): Future[Boolean]
     def getAll(): Future[List[Patient]]
     def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]]
+    def insertTreatment(id: String, treatment: Treatment): Future[Boolean]
 
   }
 
@@ -75,6 +76,15 @@ trait DaoComponentImpl extends DaoComponent {
     def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]] = {
       patientCollection.find(BSONDocument("bed_number" -> bedNumber), BSONDocument()).cursor[Patient].headOption
     }
+
+
+    def insertTreatment(id: String, treatment: Treatment): Future[Boolean] = {
+      val pushQuery = BSONDocument("$push" -> BSONDocument("treatments" -> treatment))
+
+      patientCollection.update(byId(id), pushQuery).map(lastError => !lastError.inError)
+
+    }
+
   }
 
 

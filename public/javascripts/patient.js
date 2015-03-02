@@ -40,6 +40,7 @@ app.controller("AppCtrl", ["$scope", "$resource", "$location", "apiUrl","$routeP
 
     var Patient = $resource(apiUrl + "/get/patient/" + $routeParams.id); // a RESTful-capable resource object
     Patient.get(function(response) {
+        console.log(response.data)
         $scope.patient = response.data;
 
     });
@@ -59,7 +60,6 @@ app.controller("AppCtrl", ["$scope", "$resource", "$location", "apiUrl","$routeP
 
 }]);
 
-// the global controller
 app.controller("AddTreatmentCtrl", ["$scope","$resource", "$location", "apiUrl", "$route", function($scope, $resource, $location, apiUrl, $route) {
 
     $scope.$route = $route;

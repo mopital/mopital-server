@@ -4,8 +4,8 @@
         <form name="addPatientForm" role="form" class="form-horizontal">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label" for="bed_number">Bed Number</label>
-                    <input type="number" class="form-control" id="bed_number" name="bed_number" data-ng-model="patient.bed_number" placeholder="Bed Number" required>
+                    <label class="control-label" for="bedNumber">Bed Number</label>
+                    <input type="number" class="form-control" id="bedNumber" name="bedNumber" data-ng-model="patient.bedNumber" placeholder="Bed Number" required>
                     <span data-ng-show="addPatientForm.title.$error.required" class="help-inline">Required</span>
                 </div>
 
@@ -38,7 +38,7 @@
 
                 <div class="control-group">
                     <label class="control-label" for="fileNo">File No</label>
-                    <input type="number" class="form-control" id="fileNo" name="fileNo" data-ng-model="patient.file_no" placeholder="File Number" required>
+                    <input type="text" class="form-control" id="fileNo" name="fileNo" data-ng-model="patient.fileNo" placeholder="File Number" required>
                     <span data-ng-show="addPatientForm.author.$error.required" class="help-inline">Required</span>
                 </div>
 
@@ -48,40 +48,38 @@
                     <!-- I added below line maybe it doesn't work properly -->
                     <label class="control-label"> Blood Type</label> <br>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" ng-checked="true" value="A+">A+-</option>
+                        <input type="radio" data-ng-model="patient.bloodType" ng-checked="true" value="A+">A+-</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="A-">A-</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="A-">A-</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="B+">B+</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="B+">B+</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="B-">B-</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="B-">B-</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="AB+">AB+</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="AB+">AB+</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="AB-">AB-</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="AB-">AB-</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="0+">0+</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="0+">0+</option>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" data-ng-model="patient.blood_type" value="0-">0-</option>
+                        <input type="radio" data-ng-model="patient.bloodType" value="0-">0-</option>
                     </label>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="admission_date">Admission Date</label>
-                    <input type="number" class="form-control" id="admission_date" name="admission_date" data-ng-model="patient.admission_date" placeholder="Admission" required>
-                    <span data-ng-show="addPatientForm.author.$error.required" class="help-inline">Required</span>
+                    <label class="control-label" for="admissionDate">Admission Date</label>
+                    <input type="text" class="form-control" id="admissionDate" name="admissionDate" data-ng-model="patient.admissionDate" placeholder="Admission" required>
                 </div>
 
                 <br/>
 
-                <button data-ng-click="go('/patients')" data-ng-show="isActive('path')" class="btn btn-default">Cancel</button>
                 <button data-ng-click="addPatient()" data-ng-disabled="addPatientForm.$invalid" class="btn btn-success">Save</button>
             </fieldset>
         </form>
