@@ -31,7 +31,7 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[0] = {};
     apiList[0].type = "POST";
     apiList[0].path = "/api/add/patient/";
-    apiList[0].params = "bed_number: Int, name: String, age: Int, weight: Double, height:Double, blood_type: Option[String], file_no: Option[String], admission_date: Option[String]"
+    apiList[0].params = "bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]";
 
 
     apiList[1] = {};
@@ -74,6 +74,10 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[7].path = "/api/beacon/get/patient/";
     apiList[7].params = "uuid:String";
 
+    apiList[8] = {};
+    apiList[8].type = "POST";
+    apiList[8].path = "/api/add/treatment";
+    apiList[8].params = "patientId: String, date: Option[String], time: Option[String], tension: Option[String], temperature: Option[String], pulse: Option[String], respiration: Option[String], pain: Option[String], definition: Option[String]";
 
 
     $scope.methods = apiList;
