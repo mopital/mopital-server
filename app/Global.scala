@@ -4,8 +4,10 @@ import akka.actor.{Props, Actor}
 import play.api.libs.ws.WS
 import play.api.{Application, Logger, GlobalSettings}
 import play.libs.Akka
+import play.api.Play.current
 
 import scala.concurrent.duration.Duration
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 /**
  * Created by ahmetkucuk on 02/03/15.
