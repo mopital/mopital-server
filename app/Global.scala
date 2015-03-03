@@ -5,6 +5,7 @@ import play.api.libs.ws.WS
 import play.api.{Application, Logger, GlobalSettings}
 import play.libs.Akka
 import play.api.Play.current
+import ws.service.beaconmanagement.WcfService
 
 import scala.concurrent.duration.Duration
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -16,6 +17,9 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
     Logger.info("Application has started")
+
+//    val wcfService: WcfService = new WcfService();
+//    Logger.debug(wcfService.getBasicHttpBindingIWcfService().getUser("Name0.465239541126362").getName().getValue());
 
     Akka.system.scheduler.schedule(Duration.apply(30, TimeUnit.SECONDS), Duration.apply(1, TimeUnit.MINUTES), KeepAlive.instance, Ping)
   }
