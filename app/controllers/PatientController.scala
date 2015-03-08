@@ -8,6 +8,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import reactivemongo.bson.BSONObjectID
 import service.{PatientServiceComponent, PatientServiceComponentImpl}
+import third.webcore.models.ResponseBase
 
 import scala.concurrent.Future
 

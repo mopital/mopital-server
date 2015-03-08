@@ -1,0 +1,35 @@
+hello=hello
+
+lending_success=Book is successfully given to user
+
+book_not_available=Couldn't give the book because book is not available.
+
+book_not_found=Couldn't found book
+
+user_not_found=Couldn't find user
+
+library_notification=Monitise MEA Library Notification
+
+library_password_notification=Monitise MEA Library Notification - Password Changes
+
+json_field_error=Required fields are not satisfied
+
+success=Successful
+
+password_not_match=Password does not match
+
+password_not_strong=Password is not strong
+
+user_already_exists=User with this email already exist
+
+error_in_insert=Error while inserting
+
+update_error=Error while updating
+
+already_in_queue=You are already in queue
+
+remove_user_permission_denied=You are not allowed to remove a user
+
+already_upvoted=You have already up voted.
+
+error_in_creating_book=Couldn't create book.

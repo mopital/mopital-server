@@ -3,36 +3,49 @@
 # ~~~~
 
 # Home page
-GET         /                             controllers.Application.index(any = "none")
-GET         /apiList                      controllers.Application.api()
-GET         /patient                      controllers.Application.user(id = "none")
-GET         /patient/:id                  controllers.Application.user(id)
+GET         /                                    controllers.Application.index(any = "none")
+GET         /apiList                             controllers.Application.api()
+GET         /patient                             controllers.Application.user(id = "none")
+GET         /patient/:id                         controllers.Application.user(id)
 
+GET         /api/error                           controllers.Application.error(any = "none")
+
+
+GET         /api/users                           third.webcore.controllers.UserController.index
+POST        /api/user/renewPass                  third.webcore.controllers.UserController.renewPassword
+POST        /api/user/login                      third.webcore.controllers.UserController.login
+POST        /api/user/register                   third.webcore.controllers.UserController.register
+GET         /api/user/detail                     third.webcore.controllers.UserController.getUser
+GET         /api/user/:id                        third.webcore.controllers.UserController.get(id: String)
+DELETE      /api/user/:email                     third.webcore.controllers.UserController.deleteUser(email)
+POST        /api/user/role                       third.webcore.controllers.UserController.changeUserRole
+POST        /api/user/changePassword             third.webcore.controllers.UserController.changePassword
+POST        /api/user/forgotPassword             third.webcore.controllers.UserController.forgotPassword
 
 #Patient Controller
-GET         /api/ping                     controllers.PingPong.ping
-POST        /api/add/patient              controllers.PatientController.addPatient
-GET         /api/get/patient/:id          controllers.PatientController.get(id: String)
-GET         /api/allPatients              controllers.PatientController.allPatients
-GET         /api/beacon/get/patient/:uuid controllers.PatientController.getPatientByBeaconUUID(uuid: String)
-POST        /api/add/treatment            controllers.PatientController.addTreatment
+GET         /api/ping                            controllers.PingPong.ping
+POST        /api/add/patient                     controllers.PatientController.addPatient
+GET         /api/get/patient/:id                 controllers.PatientController.get(id: String)
+GET         /api/allPatients                     controllers.PatientController.allPatients
+GET         /api/beacon/get/patient/:uuid        controllers.PatientController.getPatientByBeaconUUID(uuid: String)
+POST        /api/add/treatment                   controllers.PatientController.addTreatment
 
 
 #Beacon Controller
-POST        /api/add/beacon               controllers.BeaconController.add
-GET         /api/allBeacons               controllers.BeaconController.getAll
+POST        /api/add/beacon                      controllers.BeaconController.add
+GET         /api/allBeacons                      controllers.BeaconController.getAll
 
 
 
 #Bed Controller
-POST        /api/add/bed                  controllers.BedController.add
-POST        /api/set/bed/beacon           controllers.BedController.setBeaconToBed
-GET         /api/allBeds                  controllers.BedController.getAll
+POST        /api/add/bed                         controllers.BedController.add
+POST        /api/set/bed/beacon                  controllers.BedController.setBeaconToBed
+GET         /api/allBeds                         controllers.BedController.getAll
 
 
 
-GET         /views/*any                   controllers.Application.loadPublicHTML(any)
+GET         /views/*any                          controllers.Application.loadPublicHTML(any)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                 controllers.Assets.at(path="/public", file)
-GET         /*any                         controllers.Application.index(any)
+GET         /assets/*file                        controllers.Assets.at(path="/public", file)
+GET         /*any                                controllers.Application.index(any)

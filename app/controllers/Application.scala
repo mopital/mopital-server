@@ -5,6 +5,7 @@ import java.io.File
 import play.Play
 import play.api._
 import play.api.mvc._
+import third.webcore.models.ResponseBase
 
 object Application extends Controller {
 
@@ -18,6 +19,10 @@ object Application extends Controller {
 
   def user(id: String) = Action {
     Ok(views.html.patient())
+  }
+
+  def error(any: String) = Action {
+    Ok(ResponseBase.error("authentication").toJson)
   }
 
   /** resolve "any" into the corresponding HTML page URI */

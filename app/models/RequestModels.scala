@@ -7,10 +7,12 @@ import reactivemongo.bson.BSONObjectID
  * Created by ahmetkucuk on 02/03/15.
  */
 class RequestModels{}
+//Patient
 
-case class AddPatientRequest (bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]) {
 
-}
+
+
+case class AddPatientRequest (bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]) {}
 
 object AddPatientRequest {
 

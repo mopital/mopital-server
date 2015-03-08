@@ -2,11 +2,10 @@ package dao
 
 import java.awt.print.Book
 
-import models.{Treatment, Bed, Beacon, Patient}
+import models._
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
-import views.html.play20.book
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -44,7 +43,6 @@ trait DaoComponent {
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
     def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]]
   }
-
 }
 
 trait DaoComponentImpl extends DaoComponent {
@@ -86,7 +84,6 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
   }
-
 
   class BeaconDaoImpl extends BeaconDao with MongoOps{
 
@@ -130,4 +127,5 @@ trait DaoComponentImpl extends DaoComponent {
       bedCollection.find(query, BSONDocument()).cursor[Bed].headOption
     }
   }
+
 }

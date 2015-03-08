@@ -1,9 +1,10 @@
-package utils
+package third.webcore.utils
 
 /**
- * Created by ahmetkucuk on 16/02/15.
+ * Created by ahmetkucuk on 07/03/15.
  */
-object Constants {
+object WebCoreConstants {
+
 
   val ERROR: String = "ERROR"
   val SUCCESS: String = "SUCCESS"

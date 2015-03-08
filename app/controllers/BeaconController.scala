@@ -1,6 +1,6 @@
 package controllers
 
-import dao.{ResponseListBeacon, ResponseBase, DaoComponentImpl, DaoComponent}
+import dao.{ResponseListBeacon, DaoComponentImpl, DaoComponent}
 import models.AddBeaconRequest
 import play.api.Logger
 import play.api.mvc.{Result, Action, Controller}
@@ -8,6 +8,7 @@ import service.{BeaconServiceComponentImpl, BeaconServiceComponent}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
+import third.webcore.models.ResponseBase
 
 import scala.concurrent.Future
 

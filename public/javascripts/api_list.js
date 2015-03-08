@@ -79,6 +79,64 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[8].path = "/api/add/treatment";
     apiList[8].params = "patientId: String, date: Option[String], time: Option[String], tension: Option[String], temperature: Option[String], pulse: Option[String], respiration: Option[String], pain: Option[String], definition: Option[String]";
 
+    apiList[9] = {};
+    apiList[9].type = "GET";
+    apiList[9].path = "/api/users";
+    apiList[9].params = "none";
+
+
+    apiList[10] = {};
+    apiList[10].type = "POST";
+    apiList[10].path = "/api/user/renewPass";
+    apiList[10].params = "email: String, hash: String, newPassword: String";
+
+
+    apiList[11] = {};
+    apiList[11].type = "POST";
+    apiList[11].path = "/api/user/login";
+    apiList[11].params = "email: String, password: String";
+
+
+    apiList[12] = {};
+    apiList[12].type = "POST";
+    apiList[12].path = "/api/user/register";
+    apiList[12].params = "name: String, department:String, email:String, password:String";
+
+
+    apiList[13] = {};
+    apiList[13].type = "GET";
+    apiList[13].path = "/api/user/detail";
+    apiList[13].params = "none";
+
+    apiList[14] = {};
+    apiList[14].type = "GET";
+    apiList[14].path = "/api/user/:id";
+    apiList[14].params = "id: String";
+
+
+    apiList[15] = {};
+    apiList[15].type = "DELETE";
+    apiList[15].path = "/api/user/:email";
+    apiList[15].params = "email: String";
+
+
+    apiList[16] = {};
+    apiList[16].type = "POST";
+    apiList[16].path = "/api/user/role";
+    apiList[16].params = "userEmail: String, role: String";
+
+
+    apiList[17] = {};
+    apiList[17].type = "POST";
+    apiList[17].path = "/api/user/changePassword";
+    apiList[17].params = "passwordOld: String, passwordNew: String";
+
+
+
+    apiList[17] = {};
+    apiList[17].type = "POST";
+    apiList[17].path = "/api/user/forgotPassword";
+    apiList[17].params = "email: String";
 
     $scope.methods = apiList;
 

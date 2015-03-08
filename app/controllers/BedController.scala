@@ -6,6 +6,7 @@ import service.{BedServiceComponentImpl, BedServiceComponent, BeaconServiceCompo
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
+import third.webcore.models.ResponseBase
 
 /**
  * Created by ahmetkucuk on 18/02/15.
