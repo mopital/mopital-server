@@ -133,10 +133,10 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
 
 
-    apiList[17] = {};
-    apiList[17].type = "POST";
-    apiList[17].path = "/api/user/forgotPassword";
-    apiList[17].params = "email: String";
+    apiList[18] = {};
+    apiList[18].type = "POST";
+    apiList[18].path = "/api/user/forgotPassword";
+    apiList[18].params = "email: String";
 
     $scope.methods = apiList;
 
