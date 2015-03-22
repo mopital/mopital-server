@@ -11,6 +11,8 @@ import play.api.libs.json.{JsValue, JsArray, Json, JsObject}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
+import scala.util.parsing.json.JSONArray
+
 /**
  * Created by ahmetkucuk on 16/02/15.
  */
@@ -20,7 +22,7 @@ class RestResponse {
 case class ResponseListPatient(result: ResponseBase, data:List[Patient]) {
 
   def toJson: JsObject = {
-    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsArray(data.map( patient => patient.toJson))))
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("patientList" -> JsArray(data.map( patient => patient.toJson))))))
   }
 }
 object ResponseListBook
@@ -31,7 +33,7 @@ object ResponseListBook
 case class ResponseListBeacon(result: ResponseBase, data:List[Beacon]) {
 
   def toJson: JsObject = {
-    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsArray(data.map( beacon => beacon.toJson))))
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("beaconList" -> JsArray(data.map( beacon => beacon.toJson))))))
   }
 }
 object ResponseListBeacon
@@ -42,7 +44,7 @@ object ResponseListBeacon
 case class ResponseListBed(result: ResponseBase, data:List[Bed]) {
 
   def toJson: JsObject = {
-    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsArray(data.map( bed => bed.toJson))))
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("beds" -> JsArray(data.map( bed => bed.toJson))))))
   }
 }
 object ResponseListBed
