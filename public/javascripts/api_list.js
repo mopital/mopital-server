@@ -43,7 +43,7 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[2] = {};
     apiList[2].type = "POST";
     apiList[2].path = "/api/add/beacon";
-    apiList[2].params = "uuid:String, major:Int, minor:Int";
+    apiList[2].params = "beaconUUID: String, major: Int, minor: Int";
 
 
     apiList[3] = {};
@@ -55,13 +55,13 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[4] = {};
     apiList[4].type = "POST";
     apiList[4].path = "/api/add/bed";
-    apiList[4].params = "bed_no:Int";
+    apiList[4].params = "bedNo:Int";
 
 
     apiList[5] = {};
     apiList[5].type = "POST";
     apiList[5].path = "/api/set/bed/beacon";
-    apiList[5].params = "bed_id:String, beacon_id:String";
+    apiList[5].params = "bedNo:String, beaconId:String";
 
 
     apiList[6] = {};

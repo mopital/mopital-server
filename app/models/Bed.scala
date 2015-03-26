@@ -8,6 +8,10 @@ import play.modules.reactivemongo.json.BSONFormats._
  */
 case class Bed(id: Option[BSONObjectID], bed_number: Int, beacon: Beacon) {
 
+  def this(addBedRequest: AddBedRequest) = {
+    this(Option(BSONObjectID.generate), addBedRequest.bedNo, new Beacon())
+  }
+
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
       "bed_number" -> Json.toJson(bed_number),

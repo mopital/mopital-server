@@ -35,6 +35,20 @@ object AddBeaconRequest {
   implicit val addBeaconRequest = Json.format[AddBeaconRequest]
 }
 
+case class AddBedRequest (bedNo: String) {}
+
+object AddBedRequest {
+
+  implicit val requestFormat = Json.format[AddBedRequest]
+}
+
+case class SetBeaconToBedRequest (bedId: String, beaconId: String) {}
+
+object SetBeaconToBedRequest {
+
+  implicit val requestFormat = Json.format[SetBeaconToBedRequest]
+}
+
 
 case class AddBloodSugarMonitoringRequest (patientId: String, urineGlucose: String, bloodGlucose: String) {}
 

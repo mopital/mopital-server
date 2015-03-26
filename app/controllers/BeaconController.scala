@@ -9,13 +9,14 @@ import service.{BeaconServiceComponentImpl, BeaconServiceComponent}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import third.webcore.models.ResponseBase
+import utils.ControllerHelperFunctions
 
 import scala.concurrent.Future
 
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
-trait BeaconController extends Controller with DaoComponent with BeaconServiceComponent{
+trait BeaconController extends Controller with DaoComponent with BeaconServiceComponent with ControllerHelperFunctions{
 
 
   def add() = Action.async(parse.json) { request =>
@@ -34,14 +35,6 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
 
   def getAll() = Action.async {
     beaconService.getAll().map(beacons => Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson))
-  }
-
-  def getResponseFromResult(result: Boolean): Result = {
-    if(result) {
-      Ok(ResponseBase.success().toResultJson)
-    } else {
-      Ok(ResponseBase.error().toResultJson)
-    }
   }
 
 }

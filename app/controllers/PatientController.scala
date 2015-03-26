@@ -9,13 +9,14 @@ import play.api.mvc._
 import reactivemongo.bson.BSONObjectID
 import service.{PatientServiceComponent, PatientServiceComponentImpl}
 import third.webcore.models.ResponseBase
+import utils.ControllerHelperFunctions
 
 import scala.concurrent.Future
 
 /**
  * Created by ahmetkucuk on 04/02/15.
  */
-trait PatientController extends Controller with DaoComponent with PatientServiceComponent{
+trait PatientController extends Controller with DaoComponent with PatientServiceComponent with ControllerHelperFunctions{
 
   def addPatient() = Action.async(parse.json) { request =>
     request.body.validate[AddPatientRequest].fold(
@@ -98,14 +99,6 @@ trait PatientController extends Controller with DaoComponent with PatientService
         Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
       }
     )
-  }
-
-  def getResponseFromResult(result: Boolean): Result = {
-    if(result) {
-      Ok(ResponseBase.success().toResultJson)
-    } else {
-      Ok(ResponseBase.error().toResultJson)
-    }
   }
 
 }

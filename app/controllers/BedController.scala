@@ -1,42 +1,52 @@
 package controllers
 
 import dao._
-import play.api.mvc.{Action, Controller}
+import models.{SetBeaconToBedRequest, AddBedRequest, AddBeaconRequest, AddPeriodicMonitoringRequest}
+import play.api.Logger
+import play.api.mvc.{Result, Action, Controller}
 import service.{BedServiceComponentImpl, BedServiceComponent, BeaconServiceComponentImpl, BeaconServiceComponent}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import third.webcore.models.ResponseBase
+import utils.ControllerHelperFunctions
+
+import scala.concurrent.Future
 
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
 
-trait BedController extends Controller with DaoComponent with BedServiceComponent{
+trait BedController extends Controller with DaoComponent with BedServiceComponent with ControllerHelperFunctions{
 
   def add() = Action.async(parse.json) { request =>
 
-    val bed_no = request.body.\("bed_no").as[Int]
+    request.body.validate[AddBedRequest].fold(
+      valid = { addBedRequest: AddBedRequest=>
 
-    bedService.add(bed_no).map( result =>
-      result match {
-        case true => Ok(ResponseBase.success().toJson)
-        case _ => Ok(ResponseBase.error().toJson)
+        bedService.add(addBedRequest).map { result =>
+          getResponseFromResult(result)
+        }
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
       }
     )
   }
 
   def setBeaconToBed() = Action.async(parse.json) { request =>
 
-    val bedId = request.body.\("bed_id").as[String]
-    val beaconId = request.body.\("beacon_id").as[String]
+    request.body.validate[SetBeaconToBedRequest].fold(
+      valid = { setBeaconToBedRequest: SetBeaconToBedRequest =>
 
-    bedService.updateBeacon(bedId, beaconId).map { result =>
-      result match {
-        case true => Ok(ResponseBase.success().toJson)
-        case _ => Ok(ResponseBase.error().toJson)
+        bedService.setBeaconToBed(setBeaconToBedRequest).map { result =>
+          getResponseFromResult(result)
+        }
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
       }
-    }
+    )
 
   }
 

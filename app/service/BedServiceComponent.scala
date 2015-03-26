@@ -1,7 +1,7 @@
 package service
 
 import dao.DaoComponent
-import models.{Beacon, Bed}
+import models.{SetBeaconToBedRequest, AddBedRequest, Beacon, Bed}
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
@@ -16,9 +16,9 @@ trait BedServiceComponent {
   val bedService: BedService
 
   trait BedService {
-    def add(number: Int): Future[Boolean]
+    def add(addBedRequest: AddBedRequest): Future[Boolean]
     def getAll(): Future[List[Bed]]
-    def updateBeacon(bedId: String, beaconId: String): Future[Boolean]
+    def setBeaconToBed(setBeaconToBedRequest: SetBeaconToBedRequest): Future[Boolean]
   }
 
 }
@@ -31,20 +31,20 @@ trait BedServiceComponentImpl extends BedServiceComponent {
 
   class BedServiceImpl extends BedService {
 
-    def add(number: Int): Future[Boolean] = {
+    def add(addBedRequest: AddBedRequest): Future[Boolean] = {
 
-      bedDao.add(new Bed(Some(BSONObjectID.generate), number, new Beacon()))
+      bedDao.add(new Bed(addBedRequest))
 
     }
     def getAll(): Future[List[Bed]] = {
       bedDao.getAll()
     }
 
-    def updateBeacon(bedId: String, beaconId: String): Future[Boolean] = {
-      beaconService.get(beaconId).flatMap {
+    def setBeaconToBed(setBeaconToBedRequest: SetBeaconToBedRequest): Future[Boolean] = {
+      beaconService.get(setBeaconToBedRequest.beaconId).flatMap {
         case Some(beacon) =>
           //check result and generate appropriate response
-          bedDao.updateBedBeacon(bedId, beacon).map(result => result)
+          bedDao.updateBedBeacon(setBeaconToBedRequest.bedId, beacon).map(result => result)
         case _ =>
           Future.successful(false);
       }
