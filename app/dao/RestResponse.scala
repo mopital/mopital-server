@@ -44,7 +44,7 @@ object ResponseListBeacon
 case class ResponseListBed(result: ResponseBase, data:List[Bed]) {
 
   def toJson: JsObject = {
-    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("beds" -> JsArray(data.map( bed => bed.toJson))))))
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("bedList" -> JsArray(data.map( bed => bed.toJson))))))
   }
 }
 object ResponseListBed

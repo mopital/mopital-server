@@ -12,7 +12,7 @@ class RequestModels{}
 
 
 
-case class AddPatientRequest (bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]) {}
+case class AddPatientRequest (bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: String, fileNo: String, admissionDate: String, diagnoses: String, allergy: String, nurse: String, painRegion: String, painType: String, painDuration: String) {}
 
 object AddPatientRequest {
 
@@ -28,11 +28,24 @@ object AddTreatmentRequest {
   implicit val addTreatmentRequest = Json.format[AddTreatmentRequest]
 }
 
-case class AddBeaconRequest (beaconUUID: String, major: Int, minor: Int) {
-
-}
+case class AddBeaconRequest (beaconUUID: String, major: Int, minor: Int) {}
 
 object AddBeaconRequest {
 
   implicit val addBeaconRequest = Json.format[AddBeaconRequest]
+}
+
+
+case class AddBloodSugarMonitoringRequest (patientId: String, urineGlucose: String, bloodGlucose: String) {}
+
+object AddBloodSugarMonitoringRequest {
+
+  implicit val requestFormat = Json.format[AddBloodSugarMonitoringRequest]
+}
+
+case class AddPeriodicMonitoringRequest (patientId: String, tension: Double, fever: Double, pulse: Int, respiration: String, pain: String) {}
+
+object AddPeriodicMonitoringRequest {
+
+  implicit val requestFormat = Json.format[AddPeriodicMonitoringRequest]
 }

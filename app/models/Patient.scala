@@ -7,7 +7,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 05/02/15.
  */
-case class Patient(id: Option[BSONObjectID], bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String], treatments: List[Treatment]) {
+case class Patient(id: Option[BSONObjectID], bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: String, fileNo: String, admissionDate: String, treatments: List[Treatment], nurseRecords: NurseRecords) {
 
   def this(addPatientRequest: AddPatientRequest) {
     this(Option(BSONObjectID.generate),
@@ -19,21 +19,23 @@ case class Patient(id: Option[BSONObjectID], bedNumber: Int, name: String, age: 
       addPatientRequest.bloodType,
       addPatientRequest.fileNo,
       addPatientRequest.admissionDate,
-      List()
+      List(),
+      new NurseRecords(addPatientRequest)
     )
   }
 
   def toJson(): JsValue = {
     JsObject(Seq("id" -> Json.toJson(id.get.stringify),
-      "bed_number" -> Json.toJson(bedNumber),
+      "bedNumber" -> Json.toJson(bedNumber),
       "name" -> Json.toJson(name),
       "age" -> Json.toJson(age),
       "weight" -> Json.toJson(weight),
       "height" -> Json.toJson(height),
-      "blood_type" -> Json.toJson(bloodType),
-      "file_no" -> Json.toJson(fileNo),
-      "admission_date" -> Json.toJson(admissionDate),
-      "treatments" -> JsArray(treatments.map(p => p.toJson()))
+      "bloodType" -> Json.toJson(bloodType),
+      "fileNo" -> Json.toJson(fileNo),
+      "admissionDate" -> Json.toJson(admissionDate),
+      "treatments" -> JsArray(treatments.map(p => p.toJson())),
+      "nurseRecords" -> nurseRecords.toJson()
     ))
   }
 
@@ -53,9 +55,10 @@ object Patient {
         "weight" -> patient.weight,
         "height" -> patient.height,
         "blood_type" -> patient.bloodType,
-        "fileNo" -> patient.fileNo,
+        "file_no" -> patient.fileNo,
         "admission_date" -> patient.admissionDate,
-        "treatments" -> patient.treatments
+        "treatments" -> patient.treatments,
+        "nurse_records" -> patient.nurseRecords
       )
   }
 
@@ -69,11 +72,11 @@ object Patient {
         doc.getAs[Int]("age").get,
         doc.getAs[Double]("weight").get,
         doc.getAs[Double]("height").get,
-        doc.getAs[String]("blood_type"),
-        doc.getAs[String]("fileNo"),
-        doc.getAs[String]("admission_date"),
-        doc.getAs[List[Treatment]]("treatments").get
-
+        doc.getAs[String]("blood_type").get,
+        doc.getAs[String]("file_no").get,
+        doc.getAs[String]("admission_date").get,
+        doc.getAs[List[Treatment]]("treatments").get,
+        doc.getAs[NurseRecords]("nurse_records").get
       )
   }
 

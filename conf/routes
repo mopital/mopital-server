@@ -29,6 +29,8 @@ GET         /api/get/patient/:id                 controllers.PatientController.g
 GET         /api/allPatients                     controllers.PatientController.allPatients
 GET         /api/beacon/get/patient/:uuid        controllers.PatientController.getPatientByBeaconUUID(uuid: String)
 POST        /api/add/treatment                   controllers.PatientController.addTreatment
+POST        /api/add/bloodSugarMonitoring        controllers.PatientController.addBloodSugarMonitoringData
+POST        /api/add/periodicMonitoring          controllers.PatientController.addPeriodicMonitoringData
 
 
 #Beacon Controller

@@ -31,7 +31,7 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[0] = {};
     apiList[0].type = "POST";
     apiList[0].path = "/api/add/patient/";
-    apiList[0].params = "bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: Option[String], fileNo: Option[String], admissionDate: Option[String]";
+    apiList[0].params = "bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: String, fileNo: String, admissionDate: String, diagnoses: String, allergy: String, nurse: String, painRegion: String, painType: String, painDuration: String";
 
 
     apiList[1] = {};
@@ -137,6 +137,18 @@ app.controller("ApiCtrl", ["$scope","$resource", "$location", "apiUrl", function
     apiList[18].type = "POST";
     apiList[18].path = "/api/user/forgotPassword";
     apiList[18].params = "email: String";
+
+
+    apiList[19] = {};
+    apiList[19].type = "POST";
+    apiList[19].path = "/api/add/bloodMonitoring";
+    apiList[19].params = "patientId: String, urineGlucose: String, bloodGlucose: String";
+
+
+    apiList[20] = {};
+    apiList[20].type = "POST";
+    apiList[20].path = "/api/add/periodicMonitoring";
+    apiList[20].params = "patientId: String, tension: Double, fever: Double, pulse: Int, respiration: String, pain: String";
 
     $scope.methods = apiList;
 

@@ -48,21 +48,21 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
 
     var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
     PatientList.get(function(response) {
-        $scope.patients = response.data;
+        $scope.patients = response.data.patientList;
 
     });
 
     var BeaconList = $resource(apiUrl + "/allBeacons"); // a RESTful-capable resource object
     BeaconList.get(function(response) {
         console.log(response);
-        $scope.beacons = response.data;
+        $scope.beacons = response.data.beaconList;
 
     });
 
     var BedList = $resource(apiUrl + "/allBeds"); // a RESTful-capable resource object
     BedList.get(function(response) {
         console.log(response);
-        $scope.beds = response.data;
+        $scope.beds = response.data.bedList;
 
     });
 

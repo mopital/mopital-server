@@ -26,6 +26,8 @@ trait DaoComponent {
     def getAll(): Future[List[Patient]]
     def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]]
     def insertTreatment(id: String, treatment: Treatment): Future[Boolean]
+    def insertBloodSugarMonitoring(id: String, bloodSugarMonitoring: BloodSugarMonitoring): Future[Boolean]
+    def insertPeriodicMonitoring(id: String, periodicMonitoring: PeriodicMonitoring): Future[Boolean]
 
   }
 
@@ -81,6 +83,20 @@ trait DaoComponentImpl extends DaoComponent {
 
       patientCollection.update(byId(id), pushQuery).map(lastError => !lastError.inError)
 
+    }
+
+    def insertBloodSugarMonitoring(id: String, bloodSugarMonitoring: BloodSugarMonitoring): Future[Boolean] = {
+
+      val pushQuery = BSONDocument("$push" -> BSONDocument("nurse_records.blood_sugar_monitoring_records" -> bloodSugarMonitoring))
+
+      patientCollection.update(byId(id), pushQuery).map(lastError => !lastError.inError)
+    }
+
+    def insertPeriodicMonitoring(id: String, periodicMonitoring: PeriodicMonitoring): Future[Boolean] = {
+
+      val pushQuery = BSONDocument("$push" -> BSONDocument("nurse_records.periodic_monitoring_records" -> periodicMonitoring))
+
+      patientCollection.update(byId(id), pushQuery).map(lastError => !lastError.inError)
     }
 
   }

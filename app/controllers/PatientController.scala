@@ -1,7 +1,7 @@
 package controllers
 
 import dao._
-import models.{AddTreatmentRequest, AddPatientRequest, Treatment, Patient}
+import models._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Json}
@@ -67,8 +67,37 @@ trait PatientController extends Controller with DaoComponent with PatientService
         invalid = { e => Logger.error(s"Add Patient Controller] $e");
           Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
         }
-
       )
+  }
+
+  def addBloodSugarMonitoringData() = Action.async(parse.json) { request =>
+
+    request.body.validate[AddBloodSugarMonitoringRequest].fold(
+      valid = { addBloodSugarMonitoringRequest: AddBloodSugarMonitoringRequest =>
+
+        patientService.addBloodSugarMonitoring(addBloodSugarMonitoringRequest).map { result =>
+          getResponseFromResult(result)
+        }
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
+    )
+  }
+
+  def addPeriodicMonitoringData() = Action.async(parse.json) { request =>
+
+    request.body.validate[AddPeriodicMonitoringRequest].fold(
+      valid = { addPeriodicMonitoringRequest: AddPeriodicMonitoringRequest =>
+
+        patientService.addPeriodicMonitoring(addPeriodicMonitoringRequest).map { result =>
+          getResponseFromResult(result)
+        }
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
+    )
   }
 
   def getResponseFromResult(result: Boolean): Result = {

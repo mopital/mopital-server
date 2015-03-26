@@ -8,7 +8,7 @@
         <th>Parameters</th>
         </thead>
         <tbody>
-        <tr ng-repeat="method in methods">
+        <tr ng-repeat="method in methods | orderBy:'path'">
             <td>{{method.type}}</td>
             <td>{{method.path}}</td>
             <td>{{method.params}}</td>

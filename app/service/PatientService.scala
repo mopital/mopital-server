@@ -1,7 +1,7 @@
 package service
 
 import dao.DaoComponent
-import models.{AddTreatmentRequest, AddPatientRequest, Treatment, Patient}
+import models._
 import play.api.Logger
 import reactivemongo.bson.BSONObjectID
 
@@ -23,6 +23,8 @@ trait PatientServiceComponent {
     def getAll(): Future[List[Patient]]
     def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]]
     def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean]
+    def addBloodSugarMonitoring(addBloodSugarMonitoringRequest: AddBloodSugarMonitoringRequest): Future[Boolean]
+    def addPeriodicMonitoring(addPeriodicMonitoringRequest: AddPeriodicMonitoringRequest): Future[Boolean]
   }
 }
 
@@ -60,6 +62,14 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
 
     def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean] = {
       patientDao.insertTreatment(addTreatmentRequest.patientId, new Treatment(addTreatmentRequest))
+    }
+
+    def addBloodSugarMonitoring(addBloodSugarMonitoringRequest: AddBloodSugarMonitoringRequest): Future[Boolean] = {
+      patientDao.insertBloodSugarMonitoring(addBloodSugarMonitoringRequest.patientId, new BloodSugarMonitoring(addBloodSugarMonitoringRequest))
+    }
+
+    def addPeriodicMonitoring(addPeriodicMonitoringRequest: AddPeriodicMonitoringRequest): Future[Boolean] = {
+      patientDao.insertPeriodicMonitoring(addPeriodicMonitoringRequest.patientId, new PeriodicMonitoring(addPeriodicMonitoringRequest))
     }
   }
 }
