@@ -38,7 +38,7 @@ app.controller("AppCtrl", ["$scope", "$resource", "$location", "apiUrl","$routeP
 
     console.log("id: " + $routeParams.id);
 
-    var Patient = $resource(apiUrl + "/get/patient/" + $routeParams.id); // a RESTful-capable resource object
+    var Patient = $resource(apiUrl + "/patient/get/" + $routeParams.id); // a RESTful-capable resource object
     Patient.get(function(response) {
         console.log(response.data)
         $scope.patient = response.data;
@@ -65,7 +65,7 @@ app.controller("AddTreatmentCtrl", ["$scope","$resource", "$location", "apiUrl",
     $scope.$route = $route;
     console.log($location.search()['id']);
 
-    var Patient = $resource(apiUrl + "/get/patient/" + "54f25aea811b526501cc5b87"); // a RESTful-capable resource object
+    var Patient = $resource(apiUrl + "/patient/get/" + "54f25aea811b526501cc5b87"); // a RESTful-capable resource object
     Patient.get(function(response) {
         $scope.patient = response.data;
 

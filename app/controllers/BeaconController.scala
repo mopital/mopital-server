@@ -21,22 +21,20 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
 
   def add() = Action.async(parse.json) { request =>
 
-    request.body.validate[AddBeaconRequest].fold(
+    request.body.validate[AddBeaconRequest].fold (
 
       valid = { addBeaconRequest =>
-        beaconService.add(addBeaconRequest).map( result => getResponseFromResult(result))
+        beaconService.add(addBeaconRequest).map ( result => getResponseFromResult(result))
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
         Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
       }
-
     )
   }
 
   def getAll() = Action.async {
     beaconService.getAll().map(beacons => Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson))
   }
-
 }
 
 object BeaconController extends BeaconController

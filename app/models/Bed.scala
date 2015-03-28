@@ -6,7 +6,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 18/02/15.
  */
-case class Bed(id: Option[BSONObjectID], bed_number: Int, beacon: Beacon) {
+case class Bed(id: Option[BSONObjectID], bed_number: Int, beacon: Beacon) extends BaseModel{
 
   def this(addBedRequest: AddBedRequest) = {
     this(Option(BSONObjectID.generate), addBedRequest.bedNo, new Beacon())

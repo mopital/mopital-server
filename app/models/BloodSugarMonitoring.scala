@@ -7,7 +7,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 22/03/15.
  */
-case class BloodSugarMonitoring(recordedAt: Long, urineGlucose: String, bloodGlucose: String ) {
+case class BloodSugarMonitoring(recordedAt: Long, urineGlucose: String, bloodGlucose: String ) extends BaseModel {
 
   def this(addBloodSugarMonitoringRequest: AddBloodSugarMonitoringRequest) {
     this(System.currentTimeMillis(), addBloodSugarMonitoringRequest.urineGlucose, addBloodSugarMonitoringRequest.bloodGlucose)

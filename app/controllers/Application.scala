@@ -2,10 +2,13 @@ package controllers
 
 import java.io.File
 
+import akka.routing.Router
 import play.Play
 import play.api._
+import play.api.libs.json.{Json, JsArray}
 import play.api.mvc._
 import third.webcore.models.ResponseBase
+import utils.ApiGenerator
 
 object Application extends Controller {
 
@@ -15,6 +18,10 @@ object Application extends Controller {
 
   def api() = Action {
     Ok(views.html.main())
+  }
+
+  def apiData() = Action {
+    Ok(ApiGenerator.getApiJson())
   }
 
   def user(id: String) = Action {

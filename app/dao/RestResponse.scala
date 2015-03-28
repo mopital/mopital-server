@@ -1,6 +1,6 @@
 package dao
 
-import models.{Bed, Beacon, Patient}
+import models._
 import play.Logger
 import play.i18n.Messages
 import reactivemongo.core.commands.LastError
@@ -50,10 +50,18 @@ case class ResponseListBed(result: ResponseBase, data:List[Bed]) {
 object ResponseListBed
 
 
-case class ResponsePatient(result: ResponseBase, data:Patient) {
+case class ResponseBaseModel(result: ResponseBase, data:BaseModel) {
 
   def toJson: JsObject = {
     JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> data.toJson()))
   }
 }
 object ResponsePatient
+
+case class ResponseListEquipment(result: ResponseBase, data:List[Equipment]) {
+
+  def toJson: JsObject = {
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> JsObject(Seq("equipmentList" -> JsArray(data.map( equipment => equipment.toJson))))))
+  }
+}
+object ResponseListEquipment

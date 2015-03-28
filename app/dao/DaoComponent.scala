@@ -18,6 +18,7 @@ trait DaoComponent {
   val patientDao: PatientDao
   val beaconDao: BeaconDao
   val bedDao: BedDao
+  val equipmentDao: EquipmentDao
 
   trait PatientDao {
 
@@ -45,6 +46,13 @@ trait DaoComponent {
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
     def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]]
   }
+
+  trait EquipmentDao {
+    def add(equipment: Equipment): Future[Boolean]
+    def getAll(): Future[List[Equipment]]
+    def get(id: String): Future[Option[Equipment]]
+    def setBeacon(id: String, beacon: Beacon): Future[Boolean]
+  }
 }
 
 trait DaoComponentImpl extends DaoComponent {
@@ -52,6 +60,7 @@ trait DaoComponentImpl extends DaoComponent {
   val patientDao = new PatientDaoImpl
   val beaconDao = new BeaconDaoImpl
   val bedDao = new BedDaoImpl
+  val equipmentDao = new EquipmentDaoImpl
 
   class PatientDaoImpl extends PatientDao with MongoOps{
 
@@ -141,6 +150,26 @@ trait DaoComponentImpl extends DaoComponent {
     def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]] = {
       val query = BSONDocument( "beacon.uuid" -> beaconNumber)
       bedCollection.find(query, BSONDocument()).cursor[Bed].headOption
+    }
+  }
+
+  class EquipmentDaoImpl extends EquipmentDao with MongoOps{
+
+    def equipmentCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("equipment")
+
+    def add(equipment: Equipment): Future[Boolean] = {
+      equipmentCollection.insert(equipment).map(lastError => !lastError.inError)
+    }
+
+    def getAll(): Future[List[Equipment]] = {
+      equipmentCollection.find(BSONDocument(), BSONDocument()).cursor[Equipment].collect[List](Int.MaxValue, true)
+    }
+    def get(id: String): Future[Option[Equipment]] = {
+      equipmentCollection.find(byId(id), BSONDocument()).cursor[Equipment].headOption
+    }
+
+    def setBeacon(id:String, beacon:Beacon): Future[Boolean] = {
+      equipmentCollection.update(byId(id), BSONDocument("$set" -> BSONDocument("beacon" -> beacon))).map(lastError => !lastError.inError)
     }
   }
 

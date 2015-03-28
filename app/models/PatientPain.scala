@@ -7,7 +7,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 22/03/15.
  */
-case class PatientPain(region: String, typeOfPain: String, duration: String) {
+case class PatientPain(region: String, typeOfPain: String, duration: String) extends BaseModel{
 
   def toJson(): JsValue = {
     JsObject(Seq("region" -> Json.toJson(region),

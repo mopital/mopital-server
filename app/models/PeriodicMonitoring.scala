@@ -7,7 +7,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 22/03/15.
  */
-case class PeriodicMonitoring(recordedAt: Long, tension: Double, fever: Double, pulse: Int, respiration: String, pain: String) {
+case class PeriodicMonitoring(recordedAt: Long, tension: Double, fever: Double, pulse: Int, respiration: String, pain: String) extends BaseModel{
 
   def this(addPeriodicMonitoringRequest: AddPeriodicMonitoringRequest) {
 

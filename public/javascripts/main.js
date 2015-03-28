@@ -19,7 +19,10 @@
             }).when("/beacons", {
                 templateUrl: "/assets/html/beacon-list.html",
                 controller: "AppCtrl"
-              }).when("/addBeacon", {
+              }).when("/equipments", {
+                templateUrl: "/assets/html/equipment-list.html",
+                controller: "AppCtrl"
+            }).when("/addBeacon", {
                 templateUrl: "/assets/html/add-beacon.html",
                 controller: "beaconController"
              }).when("/addPatient", {
@@ -46,23 +49,30 @@
 app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
 
 
-    var PatientList = $resource(apiUrl + "/allPatients"); // a RESTful-capable resource object
+    var PatientList = $resource(apiUrl + "/patient/all"); // a RESTful-capable resource object
     PatientList.get(function(response) {
         $scope.patients = response.data.patientList;
 
     });
 
-    var BeaconList = $resource(apiUrl + "/allBeacons"); // a RESTful-capable resource object
+    var BeaconList = $resource(apiUrl + "/beacon/all"); // a RESTful-capable resource object
     BeaconList.get(function(response) {
         console.log(response);
         $scope.beacons = response.data.beaconList;
 
     });
 
-    var BedList = $resource(apiUrl + "/allBeds"); // a RESTful-capable resource object
+    var BedList = $resource(apiUrl + "/bed/all"); // a RESTful-capable resource object
     BedList.get(function(response) {
         console.log(response);
         $scope.beds = response.data.bedList;
+
+    });
+
+    var EquipmentList = $resource(apiUrl + "/equipment/all"); // a RESTful-capable resource object
+    EquipmentList.get(function(response) {
+        console.log(response);
+        $scope.equipments = response.data.equipmentList;
 
     });
 
@@ -89,7 +99,7 @@ app.controller("beaconController", ["$scope","$resource", "$location", "apiUrl",
 
     $scope.addBeacon = function() {
         console.log($scope.beacon)
-        var CreateBeaconFromRequested = $resource(apiUrl + "/add/beacon")
+        var CreateBeaconFromRequested = $resource(apiUrl + "/beacon/add")
         CreateBeaconFromRequested.save($scope.beacon, function(response) {
             //if($rootScope.checkError(response))
     });
@@ -101,7 +111,7 @@ app.controller("patientController", ["$scope","$resource", "$location", "apiUrl"
 
        $scope.addPatient = function() {
             console.log($scope.patient)
-            var CreatePatientFromRequested = $resource(apiUrl + "/add/patient")
+            var CreatePatientFromRequested = $resource(apiUrl + "/patient/add")
             CreatePatientFromRequested.save($scope.patient, function(response) {
                 //if($rootScope.checkError(response))
         });
@@ -112,7 +122,7 @@ app.controller("beaconPatientLinkerController", ["$scope","$resource", "$locatio
 
 
    $scope.linkBeaconWithPatient = function() {
-        var CreateLinkFromRequested = $resource(apiUrl + "/set/bed/beacon")
+        var CreateLinkFromRequested = $resource(apiUrl + "/beacon/set/bed")
         CreateLinkFromRequested.save($scope.linker, function(response) {
             //if($rootScope.checkError(response))
          });

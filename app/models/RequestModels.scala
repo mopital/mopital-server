@@ -10,8 +10,6 @@ class RequestModels{}
 //Patient
 
 
-
-
 case class AddPatientRequest (bedNumber: Int, name: String, age: Int, weight: Double, height:Double, bloodType: String, fileNo: String, admissionDate: String, diagnoses: String, allergy: String, nurse: String, painRegion: String, painType: String, painDuration: String) {}
 
 object AddPatientRequest {
@@ -28,14 +26,16 @@ object AddTreatmentRequest {
   implicit val addTreatmentRequest = Json.format[AddTreatmentRequest]
 }
 
-case class AddBeaconRequest (beaconUUID: String, major: Int, minor: Int) {}
+case class AddBeaconRequest (beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String) {
+  def this() = this("", 10, 10, "", "")
+}
 
 object AddBeaconRequest {
 
   implicit val addBeaconRequest = Json.format[AddBeaconRequest]
 }
 
-case class AddBedRequest (bedNo: String) {}
+case class AddBedRequest (bedNo: Int) {}
 
 object AddBedRequest {
 
@@ -63,3 +63,33 @@ object AddPeriodicMonitoringRequest {
 
   implicit val requestFormat = Json.format[AddPeriodicMonitoringRequest]
 }
+
+case class AddEquipmentRequest(recordId: String, name: String, typeOfEquipment: String) {}
+
+object AddEquipmentRequest{
+
+  implicit val requestFormat = Json.format[AddEquipmentRequest]
+}
+
+
+case class SetBeaconToEquipment(equipmentId: String, beaconId: String) {}
+
+object SetBeaconToEquipment{
+
+  implicit val requestFormat = Json.format[SetBeaconToEquipment]
+}
+
+case class GetEquipmentRequest(equipmentId: String) {}
+
+object GetEquipmentRequest{
+
+  implicit val requestFormat = Json.format[GetEquipmentRequest]
+}
+
+case class GetEquipmentLastPositionRequest(equipmentId: String) {}
+
+object GetEquipmentLastPositionRequest {
+
+  implicit val requestFormat = Json.format[GetEquipmentLastPositionRequest]
+}
+

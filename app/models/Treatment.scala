@@ -7,7 +7,7 @@ import play.modules.reactivemongo.json.BSONFormats._
 /**
  * Created by ahmetkucuk on 28/02/15.
  */
-case class Treatment(id: Option[BSONObjectID], date: Option[String], time: Option[String], tension: Option[String], temperature: Option[String], pulse: Option[String], respiration: Option[String], pain: Option[String], definition: Option[String]) {
+case class Treatment(id: Option[BSONObjectID], date: Option[String], time: Option[String], tension: Option[String], temperature: Option[String], pulse: Option[String], respiration: Option[String], pain: Option[String], definition: Option[String]) extends BaseModel{
 
   def this(addTreatmentRequest: AddTreatmentRequest) {
     this(Option(BSONObjectID.generate),

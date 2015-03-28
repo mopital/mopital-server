@@ -5,15 +5,33 @@
         <thead>
         <th>Method Type</th>
         <th>Path</th>
-        <th>Parameters</th>
         </thead>
         <tbody>
-        <tr ng-repeat="method in methods | orderBy:'path'">
-            <td>{{method.type}}</td>
-            <td>{{method.path}}</td>
-            <td>{{method.params}}</td>
+        <tr ng-repeat="each in methodsAndData | orderBy:'path'">
+            <td>{{each.method}}</td>
+            <td>{{each.path}}</td>
         </tr>
         </tbody>
+
+    </table>
+
+    <table class="table">
+
+        <thead>
+        <th>Request Variables</th>
+        </thead>
+        <tbody>
+
+            <tr ng-repeat="r in requestObjects">
+                <td>{{r}}</td>
+            </tr>
+        </tbody>
+
+
+
+        <tr ng-repeat="r in requestObject">
+            <td>{{r.method}}</td>
+        </tr>
 
     </table>
 

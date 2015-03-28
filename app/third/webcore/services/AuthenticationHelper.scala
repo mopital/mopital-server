@@ -51,7 +51,7 @@ trait AuthenticationHelper {
           }
         }
       case _ =>
-        Future.successful(Redirect(routes.Application.user("none")))
+        Future.successful(Redirect(routes.Application.index("none")))
     }
 
   }

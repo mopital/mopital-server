@@ -37,7 +37,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
   def get(id: String) = Action.async {
     patientService.get(id).map {
       case Some(patient) =>
-        Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
+        Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson)
       case _ => Ok(ResponseBase.error().toJson)
     }
   }
@@ -51,7 +51,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
     patientService.getPatientByBeaconUUID(uuid).map {
       case Some(patient) =>
-        Ok(ResponsePatient(ResponseBase.success(), patient).toJson)
+        Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson)
       case _ => Ok(ResponseBase.error().toJson)
     }
   }
