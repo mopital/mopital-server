@@ -7,7 +7,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import reactivemongo.bson.BSONObjectID
-import service.{PatientServiceComponent, PatientServiceComponentImpl}
+import service.{GCMServiceComponentImpl, GCMServiceComponent, PatientServiceComponent, PatientServiceComponentImpl}
 import third.webcore.models.ResponseBase
 import utils.ControllerHelperFunctions
 
@@ -16,7 +16,7 @@ import scala.concurrent.Future
 /**
  * Created by ahmetkucuk on 04/02/15.
  */
-trait PatientController extends Controller with DaoComponent with PatientServiceComponent with ControllerHelperFunctions{
+trait PatientController extends Controller with DaoComponent with PatientServiceComponent with GCMServiceComponent with ControllerHelperFunctions{
 
   def addPatient() = Action.async(parse.json) { request =>
     request.body.validate[AddPatientRequest].fold(
@@ -101,8 +101,41 @@ trait PatientController extends Controller with DaoComponent with PatientService
     )
   }
 
+  def addGCM() = Action.async(parse.json) { request =>
+    request.body.validate[AddGCMRequest].fold(
+      valid = { addGCMRequest: AddGCMRequest =>
+
+        gcmService.add(addGCMRequest).map { result =>
+          getResponseFromResult(result)
+        }
+
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
+
+    )
+  }
+
+  def notifyUser() = Action.async(parse.json) { request =>
+    request.body.validate[NotifyUserRequest].fold(
+      valid = { notifyUserRequest: NotifyUserRequest =>
+
+        gcmService.notifyUser(notifyUserRequest).map { result =>
+          getResponseFromResult(result)
+        }
+
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+      }
+
+    )
+  }
+
 }
 
 object PatientController extends PatientController
                          with DaoComponentImpl
+                         with GCMServiceComponentImpl
                          with PatientServiceComponentImpl

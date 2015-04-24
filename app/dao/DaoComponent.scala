@@ -19,6 +19,7 @@ trait DaoComponent {
   val beaconDao: BeaconDao
   val bedDao: BedDao
   val equipmentDao: EquipmentDao
+  val gcmDao: GCMDao
 
   trait PatientDao {
 
@@ -53,6 +54,14 @@ trait DaoComponent {
     def get(id: String): Future[Option[Equipment]]
     def setBeacon(id: String, beacon: Beacon): Future[Boolean]
   }
+
+  trait GCMDao {
+
+    def add(gcmHolder: GCMHolder): Future[Boolean]
+
+    def getGCMIdByUserId(userId: String): Future[Option[GCMHolder]]
+
+  }
 }
 
 trait DaoComponentImpl extends DaoComponent {
@@ -61,6 +70,7 @@ trait DaoComponentImpl extends DaoComponent {
   val beaconDao = new BeaconDaoImpl
   val bedDao = new BedDaoImpl
   val equipmentDao = new EquipmentDaoImpl
+  val gcmDao = new GCMDaoImpl
 
   class PatientDaoImpl extends PatientDao with MongoOps{
 
@@ -170,6 +180,19 @@ trait DaoComponentImpl extends DaoComponent {
 
     def setBeacon(id:String, beacon:Beacon): Future[Boolean] = {
       equipmentCollection.update(byId(id), BSONDocument("$set" -> BSONDocument("beacon" -> beacon))).map(lastError => !lastError.inError)
+    }
+  }
+
+  class GCMDaoImpl extends GCMDao with MongoOps {
+
+    def gcmCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("gcm")
+
+    def add(gcmHolder: GCMHolder): Future[Boolean] = {
+      gcmCollection.insert(gcmHolder).map(lastError => !lastError.inError)
+    }
+
+    def getGCMIdByUserId(userId: String): Future[Option[GCMHolder]] = {
+      gcmCollection.find(BSONDocument("user_id" -> userId)).cursor[GCMHolder].headOption
     }
   }
 

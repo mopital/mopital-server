@@ -93,3 +93,17 @@ object GetEquipmentLastPositionRequest {
   implicit val requestFormat = Json.format[GetEquipmentLastPositionRequest]
 }
 
+case class AddGCMRequest(userId: String, gcmId: String) {}
+
+object AddGCMRequest {
+
+  implicit val requestFormat = Json.format[AddGCMRequest]
+}
+
+case class NotifyUserRequest(userId: String, messageToSend: String) {}
+
+object NotifyUserRequest {
+
+  implicit val requestFormat = Json.format[NotifyUserRequest]
+}
+
