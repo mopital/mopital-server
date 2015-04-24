@@ -29,7 +29,7 @@ object ApiGenerator {
   }
 
   def getRequestClassAttributes(): JsValue = {
-    val classList = List(new AddBeaconRequest, new AddBedRequest(10), new AddBloodSugarMonitoringRequest("","",""), AddEquipmentRequest("", "", ""), AddPatientRequest(10, "", 11, 1.2, 1.2, "", "", "", "", "", "", "", "", ""), new AddPeriodicMonitoringRequest("", 1.3, 1.2, 10, "", ""), new AddTreatmentRequest("", None, None, None, None, None, None, None, None), new GetEquipmentLastPositionRequest(""), new GetEquipmentRequest(""), new SetBeaconToBedRequest("",""), new SetBeaconToEquipment("", "") )
+    val classList = List(new AddBeaconRequest, new AddBedRequest(10), new AddBloodSugarMonitoringRequest("","",""), AddEquipmentRequest("", "", ""), AddPatientRequest(10, "", 11, 1.2, 1.2, "", "", "", "", "", "", "", "", ""), new AddPeriodicMonitoringRequest("", 1.3, 1.2, 10, "", ""), new AddTreatmentRequest("", None, None, None, None, None, None, None, None), new GetEquipmentLastPositionRequest(""), new GetEquipmentRequest(""), new SetBeaconToBedRequest("",""), new SetBeaconToEquipment("", ""), new AddGCMRequest("", ""), new NotifyUserRequest("", "") )
     JsArray(classList.map(o => Json.toJson(classToAttributeString(o))))
   }
 
