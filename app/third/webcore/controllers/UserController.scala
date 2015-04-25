@@ -35,13 +35,13 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
         case None =>
           AllowRemoteResult(Ok(ResponseBase.error(Messages.get("user_not_found")).toResultJson))
         case Some(user) =>
-          AllowRemoteResult((Ok(ResponseUser(ResponseBase.success(), user).toJson))
+          AllowRemoteResult(Ok(ResponseUser(ResponseBase.success(), user).toJson))
       }
   }
 
   def index = Action.async {
       userService.getUsers().map{users =>
-        AllowRemoteResult((Ok(ResponseListUser(ResponseBase.success(), users).toJson))
+        AllowRemoteResult(Ok(ResponseListUser(ResponseBase.success(), users).toJson))
       }
   }
 
@@ -59,7 +59,7 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
               }
             case None =>
               Logger.info("Login Fail with email: " + loginRequest.email + " password: " + loginRequest.password)
-              AllowRemoteResult((Ok(ResponseBase.error().toResultJson))
+              AllowRemoteResult(Ok(ResponseBase.error().toResultJson))
           }
         },
         invalid = { e =>
