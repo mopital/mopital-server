@@ -6,6 +6,7 @@ import models._
 import play.api.libs.json.{JsArray, Json, JsObject, JsValue}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import third.webcore.models._
 
 /**
  * Created by ahmetkucuk on 28/03/15.
@@ -29,7 +30,7 @@ object ApiGenerator {
   }
 
   def getRequestClassAttributes(): JsValue = {
-    val classList = List(new AddBeaconRequest, new AddBedRequest(10), new AddBloodSugarMonitoringRequest("","",""), AddEquipmentRequest("", "", ""), AddPatientRequest(10, "", 11, 1.2, 1.2, "", "", "", "", "", "", "", "", ""), new AddPeriodicMonitoringRequest("", 1.3, 1.2, 10, "", ""), new AddTreatmentRequest("", None, None, None, None, None, None, None, None), new GetEquipmentLastPositionRequest(""), new GetEquipmentRequest(""), new SetBeaconToBedRequest("",""), new SetBeaconToEquipment("", ""), new AddGCMRequest("", ""), new NotifyUserRequest("", "") )
+    val classList = List(new AddBeaconRequest, new AddBedRequest(10), new AddBloodSugarMonitoringRequest("","",""), AddEquipmentRequest("", "", ""), AddPatientRequest(10, "", 11, 1.2, 1.2, "", "", "", "", "", "", "", "", ""), new AddPeriodicMonitoringRequest("", 1.3, 1.2, 10, "", ""), new AddTreatmentRequest("", None, None, None, None, None, None, None, None), new GetEquipmentLastPositionRequest(""), new GetEquipmentRequest(""), new SetBeaconToBedRequest("",""), new SetBeaconToEquipment("", ""), new AddGCMRequest("", ""), new NotifyUserRequest("", ""), new RegisterRequest("", "", "", ""), new ChangeUserRoleRequest("", ""), new ChangePasswordRequest("", ""), new RenewPasswordRequest("", "", ""), new LoginRequest("", "") )
     JsArray(classList.map(o => Json.toJson(classToAttributeString(o))))
   }
 
