@@ -7,6 +7,7 @@ GET           /                                            controllers.Applicati
 GET           /apiList                                     controllers.Application.api()
 GET           /apiListData                                 controllers.Application.apiData()
 GET           /api/error                                   controllers.Application.error(any = "none")
+OPTIONS       /api/*url                                    controllers.Application.options(url: String)
 
 
 GET           /api/users                                   third.webcore.controllers.UserController.index

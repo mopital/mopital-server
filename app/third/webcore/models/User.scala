@@ -16,7 +16,6 @@ case class User(name: String, department: String, email: String, password: Strin
     JsObject(Seq("name" -> Json.toJson(name),
       "department" -> Json.toJson(department),
       "email" -> Json.toJson(email),
-      "password" -> Json.toJson(password),
       "role" -> Json.toJson(role)
     ))
   }
