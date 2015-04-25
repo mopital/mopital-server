@@ -50,7 +50,7 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
   }
 
   def getAll() = Action.async {
-    equipmentService.getAll().map(equipments => Ok(ResponseListEquipment(ResponseBase.success(), equipments).toJson))
+    equipmentService.getAll().map(equipments => AllowRemoteResult(Ok(ResponseListEquipment(ResponseBase.success(), equipments).toJson)))
   }
 
   def get(id: String) = Action.async {

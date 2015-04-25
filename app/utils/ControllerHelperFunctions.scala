@@ -23,17 +23,15 @@ trait ControllerHelperFunctions {
     }
   }
 
-
-  object AllowRemoteResult {
-    def apply(result: Result): Result = {
-      result.withHeaders(
-        "Access-Control-Allow-Origin" -> "*",
-        "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
-        // cache access control response for one day
-        "Access-Control-Max-Age" -> (60 * 60 * 24).toString
-      )
-    }
+  def AllowRemoteResult(result: Result): Result = {
+    result.withHeaders(
+      "Access-Control-Allow-Origin" -> "*",
+      "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
+      // cache access control response for one day
+      "Access-Control-Max-Age" -> (60 * 60 * 24).toString
+    )
   }
+
 
 }

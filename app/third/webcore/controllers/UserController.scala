@@ -8,6 +8,7 @@ import third.webcore.dao.WebCoreDaoComponentImpl
 import third.webcore.models._
 import third.webcore.services._
 import third.webcore.utils.WebCoreConstants
+import utils.ControllerHelperFunctions
 
 import scala.concurrent.Future
 
@@ -15,16 +16,16 @@ import scala.concurrent.Future
  * Created by ahmetkucuk on 8/6/14.
  */
 
-trait UserController extends Controller with UserServiceComponent with SessionServiceComponent with AuthenticationHelper {
+trait UserController extends Controller with UserServiceComponent with SessionServiceComponent with AuthenticationHelper with ControllerHelperFunctions{
 
   def get(email: String) = Authenticated {
 
     val result = userService.getUserByEmail(email)
     result.map {
       case None =>
-        Ok(ResponseBase.error(Messages.get("user_not_found")).toResultJson)
+        AllowRemoteResult(Ok(ResponseBase.error(Messages.get("user_not_found")).toResultJson))
       case Some(user) =>
-        Ok(ResponseUser(ResponseBase.success(), user).toJson)
+        AllowRemoteResult(Ok(ResponseUser(ResponseBase.success(), user).toJson))
     }
   }
 
@@ -32,15 +33,15 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
 
       userService.getUserByEmail(email).map {
         case None =>
-          Ok(ResponseBase.error(Messages.get("user_not_found")).toResultJson)
+          AllowRemoteResult(Ok(ResponseBase.error(Messages.get("user_not_found")).toResultJson))
         case Some(user) =>
-          Ok(ResponseUser(ResponseBase.success(), user).toJson)
+          AllowRemoteResult((Ok(ResponseUser(ResponseBase.success(), user).toJson))
       }
   }
 
   def index = Action.async {
       userService.getUsers().map{users =>
-         Ok(ResponseListUser(ResponseBase.success(), users).toJson)
+        AllowRemoteResult((Ok(ResponseListUser(ResponseBase.success(), users).toJson))
       }
   }
 
@@ -52,18 +53,18 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
             case Some((sessionId, user)) =>
               Logger.info("Login Success With email: " + loginRequest.email + " password: " + loginRequest.password)
               if(user.role.equalsIgnoreCase(WebCoreConstants.ROLE_ADMIN)) {
-                Ok(ResponseUser(ResponseBase.success(), user).toJson).withSession(WebCoreConstants.SESSION_ID -> sessionId, WebCoreConstants.EMAIL -> user.email, WebCoreConstants.ROLE -> WebCoreConstants.ROLE_ADMIN)
+                AllowRemoteResult(Ok(ResponseUser(ResponseBase.success(), user).toJson).withSession(WebCoreConstants.SESSION_ID -> sessionId, WebCoreConstants.EMAIL -> user.email, WebCoreConstants.ROLE -> WebCoreConstants.ROLE_ADMIN))
               } else {
-                Ok(ResponseUser(ResponseBase.success(), user).toJson).withSession(WebCoreConstants.SESSION_ID -> sessionId, WebCoreConstants.EMAIL -> user.email, WebCoreConstants.ROLE -> WebCoreConstants.ROLE_USER)
+                AllowRemoteResult(Ok(ResponseUser(ResponseBase.success(), user).toJson).withSession(WebCoreConstants.SESSION_ID -> sessionId, WebCoreConstants.EMAIL -> user.email, WebCoreConstants.ROLE -> WebCoreConstants.ROLE_USER))
               }
             case None =>
               Logger.info("Login Fail with email: " + loginRequest.email + " password: " + loginRequest.password)
-              Ok(ResponseBase.error().toResultJson)
+              AllowRemoteResult((Ok(ResponseBase.error().toResultJson))
           }
         },
         invalid = { e =>
           Logger.error(s"[UserController-login] error: $e")
-          Future.successful(Ok(ResponseBase.error().toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error().toResultJson)))
         }
       )
   }
@@ -73,11 +74,11 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
       request.body.validate[RegisterRequest].fold (
         valid = { registerRequest =>
           userService.register(registerRequest).map{ internalResponse =>
-            Ok(ResponseBase.response(internalResponse))
+            AllowRemoteResult(Ok(ResponseBase.response(internalResponse)))
           }
         },
         invalid = {e => Logger.error(s"[UserController-register] $e");
-          Future.successful(Ok(ResponseBase.error().toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error().toResultJson)))
         }
       )
   }
@@ -87,11 +88,11 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
       request.body.validate[ChangeUserRoleRequest].fold(
         valid = {changeUserRoleRequest =>
           userService.changeUserRole(changeUserRoleRequest).map { result =>
-            Ok(ResponseBase.response(result))
+            AllowRemoteResult(Ok(ResponseBase.response(result)))
           }
         },
         invalid = {e => Logger.error(s"[changeUserRole] error: $e")
-          Future.successful(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson)))
         }
       )
   }
@@ -102,11 +103,11 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
         valid = {changePasswordRequest =>
           val email: String = request.session.get("email").get
           userService.changeUserPassword(email, changePasswordRequest).map(internalResponse =>
-            Ok(internalResponse.getResponse())
+            AllowRemoteResult(Ok(internalResponse.getResponse()))
           )
         },
         invalid = {e => Logger.debug(s"[ChangePassword] error: $e")
-          Future.successful(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson)))
         }
       )
   }
@@ -115,9 +116,9 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
 
       request.body.\("email").asOpt[String] match {
         case Some(email) =>
-          userService.forgotPassword(email).map( internalResponse => Ok(internalResponse.getResponse()))
+          userService.forgotPassword(email).map( internalResponse => AllowRemoteResult(Ok(internalResponse.getResponse())))
         case _ =>
-          Future.successful(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson)))
       }
   }
 
@@ -126,10 +127,10 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
       request.body.validate[RenewPasswordRequest].fold(
 
         valid = {renewPasswordRequest =>
-          userService.renewForgotPassword(renewPasswordRequest).map(internalResponse => Ok(internalResponse.getResponse()))
+          userService.renewForgotPassword(renewPasswordRequest).map(internalResponse => AllowRemoteResult(Ok(internalResponse.getResponse())))
         },
         invalid = {e => Logger.error(s"[UserController - RenewPassword] $e")
-          Future.successful(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error(Messages.get("json_field_error")).toResultJson)))
         }
       )
   }
@@ -137,10 +138,10 @@ trait UserController extends Controller with UserServiceComponent with SessionSe
   def deleteUser(email: String) = Authenticated { (request, _, _) =>
       if(request.session.get("role").get.equalsIgnoreCase(WebCoreConstants.ROLE_ADMIN)) {
         userService.deleteUser(email).map(result =>
-          Ok(ResponseBase.response(result))
+          AllowRemoteResult(Ok(ResponseBase.response(result)))
         )
       } else {
-        Future.successful(Ok(ResponseBase.error(Messages.get("remove_user_permission_denied")).toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error(Messages.get("remove_user_permission_denied")).toResultJson)))
       }
   }
 }
