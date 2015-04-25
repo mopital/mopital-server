@@ -1,7 +1,12 @@
 package utils
 
+import play.api.libs.json.JsObject
 import play.api.mvc._
+import reactivemongo.core.nodeset.Authenticated
 import third.webcore.models.ResponseBase
+
+import scala.concurrent.Future
+import play.api.libs.concurrent.Execution.Implicits._
 
 /**
  * Created by ahmetkucuk on 26/03/15.
@@ -12,9 +17,22 @@ trait ControllerHelperFunctions {
 
   def getResponseFromResult(result: Boolean): Result = {
     if(result) {
-      Ok(ResponseBase.success().toResultJson)
+      AllowRemoteResult(Ok(ResponseBase.success().toResultJson))
     } else {
-      Ok(ResponseBase.error().toResultJson)
+      AllowRemoteResult(Ok(ResponseBase.error().toResultJson))
+    }
+  }
+
+
+  object AllowRemoteResult {
+    def apply(result: Result): Result = {
+      result.withHeaders(
+        "Access-Control-Allow-Origin" -> "*",
+        "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
+        // cache access control response for one day
+        "Access-Control-Max-Age" -> (60 * 60 * 24).toString
+      )
     }
   }
 

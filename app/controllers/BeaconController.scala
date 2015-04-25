@@ -27,13 +27,13 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
         beaconService.add(addBeaconRequest).map ( result => getResponseFromResult(result))
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
 
   def getAll() = Action.async {
-    beaconService.getAll().map(beacons => Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson))
+    beaconService.getAll().map(beacons => AllowRemoteResult(Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson)))
   }
 }
 

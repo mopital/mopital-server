@@ -28,7 +28,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
 
     )
@@ -37,18 +37,13 @@ trait PatientController extends Controller with DaoComponent with PatientService
   def get(id: String) = Action.async {
     patientService.get(id).map {
       case Some(patient) =>
-        Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson)
-      case _ => Ok(ResponseBase.error().toJson)
+        AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson))
+      case _ => AllowRemoteResult(Ok(ResponseBase.error().toJson))
     }
   }
 
   def allPatients() = Action.async {
-      patientService.getAll().map(patients => Ok(ResponseListPatient(ResponseBase.success(), patients).toJson).withHeaders(
-        "Access-Control-Allow-Origin" -> "*",
-        "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
-        // cache access control response for one day
-        "Access-Control-Max-Age" -> (60 * 60 * 24).toString))
+      patientService.getAll().map(patients => AllowRemoteResult(Ok(ResponseListPatient(ResponseBase.success(), patients).toJson)))
   }
 
 
@@ -56,8 +51,8 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
     patientService.getPatientByBeaconUUID(uuid).map {
       case Some(patient) =>
-        Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson)
-      case _ => Ok(ResponseBase.error().toJson)
+        AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson))
+      case _ => AllowRemoteResult(Ok(ResponseBase.error().toJson))
     }
   }
 
@@ -71,7 +66,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
           }
         },
         invalid = { e => Logger.error(s"Add Patient Controller] $e");
-          Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+          Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
         }
       )
   }
@@ -86,7 +81,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
         }
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
@@ -101,7 +96,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
         }
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
@@ -116,7 +111,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
 
     )
@@ -132,7 +127,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
 
     )

@@ -29,7 +29,7 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
         }
       },
       invalid = { e => Logger.error(s"Add Equipment Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
@@ -44,7 +44,7 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
         }
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
@@ -56,14 +56,14 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
   def get(id: String) = Action.async {
     equipmentService.get(id).map {
       case Some(equipment) =>
-        Ok(ResponseBaseModel(ResponseBase.success(), equipment).toJson)
-      case _ => Ok(ResponseBase.error().toJson)
+        AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), equipment).toJson))
+      case _ => AllowRemoteResult(Ok(ResponseBase.error().toJson))
     }
   }
 
   def getEquipmentLastPosition(id: String) = Action.async {
     equipmentService.getLastPosition(id).map {
-      result => Ok(ResponseBaseModel(ResponseBase.success(), result).toJson)
+      result => AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), result).toJson))
     }
   }
 }

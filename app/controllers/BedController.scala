@@ -29,7 +29,7 @@ trait BedController extends Controller with DaoComponent with BedServiceComponen
         }
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
   }
@@ -44,14 +44,14 @@ trait BedController extends Controller with DaoComponent with BedServiceComponen
         }
       },
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
-        Future.successful(Ok(ResponseBase.error("invalid json fields.").toResultJson))
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
 
   }
 
   def getAll() = Action.async {
-    bedService.getAll().map(beds => Ok(ResponseListBed(ResponseBase.success(), beds).toJson))
+    bedService.getAll().map(beds => AllowRemoteResult(Ok(ResponseListBed(ResponseBase.success(), beds).toJson)))
   }
 
 }
