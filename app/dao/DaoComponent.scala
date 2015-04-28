@@ -188,7 +188,7 @@ trait DaoComponentImpl extends DaoComponent {
     def gcmCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("gcm")
 
     def add(gcmHolder: GCMHolder): Future[Boolean] = {
-      gcmCollection.insert(gcmHolder).map(lastError => !lastError.inError)
+      gcmCollection.update(BSONDocument("user_id" -> gcmHolder.userId), gcmHolder, upsert = true).map(lastError => !lastError.inError)
     }
 
     def getGCMIdByUserId(userId: String): Future[Option[GCMHolder]] = {
