@@ -57,7 +57,7 @@ trait GCMServiceComponentImpl extends GCMServiceComponent {
 
       val regIds = JsObject(Seq("registration_ids" -> JsArray(Seq(Json.toJson(gcmId))), "data" -> JsObject(Seq("answer" -> Json.toJson(answer)))))
       val res = WS.url(url)
-        .withHeaders("Authorization" -> "key=AIzaSyCktuT07RHRqSrzGPFFrjwYXO3aGGoakB0", "Content-Type" -> "application/json")
+        .withHeaders("Authorization" -> "key=AIzaSyCJyPltXLMHLzfMMWVPnmXAm6gHFi9aNUE", "Content-Type" -> "application/json")
         .post(regIds)
       res.map(response => Logger.debug("[UserServiceComponent-sendNotificationPost] notification Response: " + response.status + " " + response.body))
     }
