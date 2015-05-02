@@ -49,13 +49,13 @@ trait GCMServiceComponentImpl extends GCMServiceComponent {
       )
     }
 
-    def sendNotificationPost(gcmId: String, answer: String) = {
+    def sendNotificationPost(gcmId: String, message: String) = {
 
-      Logger.debug(s"in sendNotificationPost gcmId: $gcmId answer: $answer")
+      Logger.debug(s"in sendNotificationPost gcmId: $gcmId message: $message")
 
       val url = "https://android.googleapis.com/gcm/send"
 
-      val regIds = JsObject(Seq("registration_ids" -> JsArray(Seq(Json.toJson(gcmId))), "data" -> JsObject(Seq("answer" -> Json.toJson(answer)))))
+      val regIds = JsObject(Seq("registration_ids" -> JsArray(Seq(Json.toJson(gcmId))), "data" -> JsObject(Seq("message" -> Json.toJson(message)))))
       val res = WS.url(url)
         .withHeaders("Authorization" -> "key=AIzaSyCJyPltXLMHLzfMMWVPnmXAm6gHFi9aNUE", "Content-Type" -> "application/json")
         .post(regIds)
