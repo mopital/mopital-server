@@ -28,6 +28,10 @@ object Application extends Controller {
     Ok(views.html.patient())
   }
 
+  def proxy() = Action {
+    Ok(views.html.proxy())
+  }
+
   def options(url: String) = Action {
     Ok("").withHeaders(
       "Access-Control-Allow-Origin" -> "*",
