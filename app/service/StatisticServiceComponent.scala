@@ -2,6 +2,7 @@ package service
 
 import dao.DaoComponent
 import models.{Beacon, UpdateBeaconRequest, AddBeaconRequest, MopitalStatistics}
+import third.webcore.dao.WebCoreDaoComponent
 import third.webcore.models.InternalResponse
 import views.html.play20.book
 
@@ -23,7 +24,7 @@ trait StatisticServiceComponent {
 
 trait StatisticServiceComponentImpl extends StatisticServiceComponent {
 
-  this: DaoComponent =>
+  this: DaoComponent with WebCoreDaoComponent =>
   val statisticService: StatisticService = new StatisticServiceImpl
 
   class StatisticServiceImpl extends StatisticService {
@@ -31,16 +32,19 @@ trait StatisticServiceComponentImpl extends StatisticServiceComponent {
     def get(): Future[MopitalStatistics] = {
 
       val numberOfBed = bedDao.count()
+      val numberOfPatient = patientDao.count()
+      val numberOfEquipment = equipmentDao.count()
+      val numberOfBeacon = beaconDao.count()
+      val numberOfDoctor = userDao.count()
 
       for {
         nOfBed <- numberOfBed
+        nOfPatient <- numberOfPatient
+        nOfEquipment <- numberOfEquipment
+        nOfBeacon <- numberOfBeacon
+        nOfDoctor <- numberOfDoctor
       } yield {
-        (nOfBed) match {
-          case (nOfBed) =>
-            new MopitalStatistics(nOfBed, 232, 23, 433, 43, 12, 43)
-          case _=>
-            new MopitalStatistics(23, 232, 23, 433, 43, 12, 43)
-        }
+        new MopitalStatistics(nOfBed, 232, nOfBeacon, nOfDoctor, nOfEquipment, nOfPatient, 43)
       }
     }
   }

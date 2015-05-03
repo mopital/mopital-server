@@ -3,6 +3,7 @@ package controllers
 import dao.{ResponseStatistic, ResponseListBeacon, DaoComponentImpl, DaoComponent}
 import play.api.mvc.{Action, Controller}
 import service._
+import third.webcore.dao.WebCoreDaoComponentImpl
 import third.webcore.models.ResponseBase
 import utils.ControllerHelperFunctions
 
@@ -21,4 +22,5 @@ trait StatisticsController extends Controller with DaoComponent with StatisticSe
 
 object StatisticsController extends StatisticsController
 with DaoComponentImpl
+with WebCoreDaoComponentImpl
 with StatisticServiceComponentImpl

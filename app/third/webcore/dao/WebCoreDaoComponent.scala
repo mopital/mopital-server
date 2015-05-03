@@ -4,6 +4,7 @@ import dao.{MongoOps}
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONObjectID, BSONArray, BSONDocument}
+import reactivemongo.core.commands.Count
 import third.webcore.models.{SessionStatus, User}
 
 import scala.concurrent.Future
@@ -22,6 +23,7 @@ trait WebCoreDaoComponent {
 
     def getUserByEmail(email: String): Future[Option[User]]
     def getUsers(): Future[List[User]]
+    def count(): Future[Int]
     def getUserByEmailAndPasswordHash(username: String, passwordHash: String): Future[Option[User]]
     def register(user: User): Future[Boolean]
     def updateUserByEmail(email: String, user: User): Future[Boolean]
@@ -57,6 +59,10 @@ trait WebCoreDaoComponentImpl extends WebCoreDaoComponent {
 
       Logger.debug("[UserDaoImpl]: executing getUsers")
       userCollection.find(BSONDocument(), BSONDocument()).cursor[User].toList()
+    }
+
+    def count(): Future[Int] = {
+      userCollection.db.command(Count(userCollection.name))
     }
 
     def register(user: User) = {

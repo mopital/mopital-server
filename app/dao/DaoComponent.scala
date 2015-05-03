@@ -27,6 +27,7 @@ trait DaoComponent {
     def get(id: String): Future[Option[Patient]]
     def add(patient: Patient): Future[Boolean]
     def getAll(): Future[List[Patient]]
+    def count(): Future[Int]
     def getPatientByBedNumber(bedNumber: Int): Future[Option[Patient]]
     def insertTreatment(id: String, treatment: Treatment): Future[Boolean]
     def insertBloodSugarMonitoring(id: String, bloodSugarMonitoring: BloodSugarMonitoring): Future[Boolean]
@@ -37,6 +38,7 @@ trait DaoComponent {
   trait BeaconDao {
     def add(beacon: Beacon): Future[Boolean]
     def update(beacon: Beacon): Future[Boolean]
+    def count(): Future[Int]
     def getAll(): Future[List[Beacon]]
     def get(id: String): Future[Option[Beacon]]
   }
@@ -54,6 +56,7 @@ trait DaoComponent {
   trait EquipmentDao {
     def add(equipment: Equipment): Future[Boolean]
     def getAll(): Future[List[Equipment]]
+    def count(): Future[Int]
     def get(id: String): Future[Option[Equipment]]
     def setBeacon(id: String, beacon: Beacon): Future[Boolean]
   }
@@ -92,6 +95,11 @@ trait DaoComponentImpl extends DaoComponent {
 
     def getAll(): Future[List[Patient]] = {
         patientCollection.find(BSONDocument(), BSONDocument()).cursor[Patient].collect[List](Int.MaxValue, true)
+    }
+
+
+    def count(): Future[Int] = {
+      patientCollection.db.command(Count(patientCollection.name))
     }
 
 
@@ -135,6 +143,9 @@ trait DaoComponentImpl extends DaoComponent {
     }
     def getAll(): Future[List[Beacon]] = {
       beaconCollection.find(BSONDocument(), BSONDocument()).cursor[Beacon].collect[List](Int.MaxValue, true)
+    }
+    def count(): Future[Int] = {
+      beaconCollection.db.command(Count(beaconCollection.name))
     }
     def get(id: String): Future[Option[Beacon]] = {
       beaconCollection.find(byId(id), BSONDocument()).cursor[Beacon].headOption
@@ -182,6 +193,11 @@ trait DaoComponentImpl extends DaoComponent {
     def getAll(): Future[List[Equipment]] = {
       equipmentCollection.find(BSONDocument(), BSONDocument()).cursor[Equipment].collect[List](Int.MaxValue, true)
     }
+
+    def count(): Future[Int] = {
+      equipmentCollection.db.command(Count(equipmentCollection.name))
+    }
+
     def get(id: String): Future[Option[Equipment]] = {
       equipmentCollection.find(byId(id), BSONDocument()).cursor[Equipment].headOption
     }
