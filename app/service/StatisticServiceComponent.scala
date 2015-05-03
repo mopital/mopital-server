@@ -1,6 +1,9 @@
 package service
 
+import dao.DaoComponent
 import models.{Beacon, UpdateBeaconRequest, AddBeaconRequest, MopitalStatistics}
+import third.webcore.models.InternalResponse
+import views.html.play20.book
 
 import scala.concurrent.Future
 
@@ -20,12 +23,25 @@ trait StatisticServiceComponent {
 
 trait StatisticServiceComponentImpl extends StatisticServiceComponent {
 
+  this: DaoComponent =>
   val statisticService: StatisticService = new StatisticServiceImpl
 
   class StatisticServiceImpl extends StatisticService {
 
     def get(): Future[MopitalStatistics] = {
-      Future.successful(new MopitalStatistics(23, 232, 23, 433, 43, 12, 43))
+
+      val numberOfBed = bedDao.count()
+
+      for {
+        nOfBed <- numberOfBed
+      } yield {
+        (nOfBed) match {
+          case (nOfBed) =>
+            new MopitalStatistics(nOfBed, 232, 23, 433, 43, 12, 43)
+          case _=>
+            new MopitalStatistics(23, 232, 23, 433, 43, 12, 43)
+        }
+      }
     }
   }
 

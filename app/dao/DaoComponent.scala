@@ -6,6 +6,7 @@ import models._
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
+import reactivemongo.core.commands.Count
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -44,6 +45,7 @@ trait DaoComponent {
 
     def add(bed: Bed): Future[Boolean]
     def getAll(): Future[List[Bed]]
+    def count(): Future[Int]
     def updateBed(id:String, bed:Bed): Future[Boolean]
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
     def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]]
@@ -150,6 +152,9 @@ trait DaoComponentImpl extends DaoComponent {
 
     def getAll(): Future[List[Bed]] = {
       bedCollection.find(BSONDocument(), BSONDocument()).cursor[Bed].collect[List](Int.MaxValue, true)
+    }
+    def count(): Future[Int] = {
+      bedCollection.db.command(Count(bedCollection.name))
     }
 
     def updateBed(id:String, bed:Bed): Future[Boolean] = {
