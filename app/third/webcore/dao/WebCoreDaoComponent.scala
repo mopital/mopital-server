@@ -1,6 +1,7 @@
 package third.webcore.dao
 
 import dao.{MongoOps}
+import models.Patient
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.{BSONObjectID, BSONArray, BSONDocument}
@@ -58,7 +59,7 @@ trait WebCoreDaoComponentImpl extends WebCoreDaoComponent {
     def getUsers() = {
 
       Logger.debug("[UserDaoImpl]: executing getUsers")
-      userCollection.find(BSONDocument(), BSONDocument()).cursor[User].toList()
+      userCollection.find(BSONDocument(), BSONDocument()).cursor[User].collect[List](Int.MaxValue, true)
     }
 
     def count(): Future[Int] = {
