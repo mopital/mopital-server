@@ -25,7 +25,7 @@ trait ControllerHelperFunctions {
 
   def AllowRemoteResult(result: Result): Result = {
     result.withHeaders(
-      "Access-Control-Allow-Origin" -> "http://188.166.99.120:8888/",
+      "Access-Control-Allow-Origin" -> "*",
       "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers" -> "Content-Type, application/json, X-Requested-With, Accept",
       "Access-Control-Allow-Credentials" -> "true",
