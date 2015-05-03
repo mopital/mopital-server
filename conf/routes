@@ -61,6 +61,8 @@ POST          /api/bed/add                                 controllers.BedContro
 POST          /api/bed/set/beacon                          controllers.BedController.setBeaconToBed
 GET           /api/bed/all                                 controllers.BedController.getAll
 
+#statistic Controller
+GET           /api/statistics                              controllers.StatisticsController.get
 
 
 GET           /views/*any                                  controllers.Application.loadPublicHTML(any)

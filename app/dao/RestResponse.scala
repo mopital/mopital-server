@@ -38,6 +38,15 @@ case class ResponseListBeacon(result: ResponseBase, data:List[Beacon]) {
 }
 object ResponseListBeacon
 
+object ResponseStatistic
+
+case class ResponseStatistic(result: ResponseBase, data:MopitalStatistics) {
+
+  def toJson: JsObject = {
+    JsObject(Seq(Constants.RESULT -> result.toJson, Constants.DATA -> data.toJson()))
+  }
+}
+
 
 
 
