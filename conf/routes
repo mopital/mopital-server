@@ -5,7 +5,7 @@
 # Home page
 GET           /                                            controllers.Application.index(any = "none")
 GET           /apiList                                     controllers.Application.api()
-GET           /proxy                                       controllers.Application.proxy()
+GET           /proxy.html                                  controllers.Application.proxy()
 GET           /apiListData                                 controllers.Application.apiData()
 GET           /api/error                                   controllers.Application.error(any = "none")
 OPTIONS       /api/*url                                    controllers.Application.options(url: String)
