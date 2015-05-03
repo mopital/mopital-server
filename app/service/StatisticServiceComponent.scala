@@ -25,7 +25,7 @@ trait StatisticServiceComponentImpl extends StatisticServiceComponent {
   class StatisticServiceImpl extends StatisticService {
 
     def get(): Future[MopitalStatistics] = {
-      Future.successful(new MopitalStatistics(23, 232))
+      Future.successful(new MopitalStatistics(23, 232, 23, 433, 43, 12, 43))
     }
   }
 
