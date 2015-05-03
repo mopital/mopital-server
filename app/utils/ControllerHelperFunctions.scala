@@ -27,7 +27,10 @@ trait ControllerHelperFunctions {
     result.withHeaders(
       "Access-Control-Allow-Origin" -> "*",
       "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
+      "Access-Control-Allow-Headers" -> "Content-Type, application/json, X-Requested-With, Accept",
+      "Access-Control-Allow-Credentials" -> "true",
+      "Access-Control-Expose-Headers" -> "*",
+      "Access-Control-Request-Headers" -> "X-requested-with",
       // cache access control response for one day
       "Access-Control-Max-Age" -> (60 * 60 * 24).toString
     )
