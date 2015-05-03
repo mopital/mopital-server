@@ -40,6 +40,7 @@ POST          /api/patient/add/periodicMonitoring          controllers.PatientCo
 
 #Beacon Controller
 POST          /api/beacon/add                              controllers.BeaconController.add
+GET          /api/get/beacon/add/:beaconUUID/:major/:minor/:beaconType/:position controllers.BeaconController.addGET(beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String)
 GET           /api/beacon/all                              controllers.BeaconController.getAll
 
 

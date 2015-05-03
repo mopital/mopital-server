@@ -32,6 +32,11 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
     )
   }
 
+  def addGET(beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String) = Action.async {
+    val addBeaconRequest = new AddBeaconRequest(beaconUUID, major, minor, beaconType, position)
+    beaconService.add(addBeaconRequest).map ( result => getResponseFromResult(result))
+  } 
+
   def getAll() = Action.async {
     beaconService.getAll().map(beacons => AllowRemoteResult(Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson)))
   }
