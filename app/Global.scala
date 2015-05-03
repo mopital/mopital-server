@@ -2,9 +2,12 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{Props, Actor}
 import play.api.libs.ws.WS
+import play.api.mvc.Filter
 import play.api.{Application, Logger, GlobalSettings}
 import play.libs.Akka
 import play.api.Play.current
+import play.mvc.Http.RequestHeader
+import play.mvc.Result
 import ws.service.beaconmanagement.WcfService
 
 import scala.concurrent.duration.Duration
@@ -24,8 +27,8 @@ object Global extends GlobalSettings {
     Akka.system.scheduler.schedule(Duration.apply(30, TimeUnit.SECONDS), Duration.apply(1, TimeUnit.MINUTES), KeepAlive.instance, Ping)
   }
 
-}
 
+}
 object KeepAlive {
 
   val instance = Akka.system.actorOf(Props[KeepAlive], name = "keep-alive")
