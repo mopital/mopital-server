@@ -23,6 +23,7 @@ POST          /api/user/changePassword                     third.webcore.control
 POST          /api/user/forgotPassword                     third.webcore.controllers.UserController.forgotPassword
 
 POST          /api/user/notify                             controllers.PatientController.notifyUser
+GET           /api/get/user/notify/:userId/:messageToSend  controllers.PatientController.notifyUserGet(userId: String, messageToSend: String)
 POST          /api/user/save/gcm                           controllers.PatientController.addGCM
 
 GET           /api/ping                                    controllers.PingPong.ping
@@ -40,7 +41,9 @@ POST          /api/patient/add/periodicMonitoring          controllers.PatientCo
 
 #Beacon Controller
 POST          /api/beacon/add                              controllers.BeaconController.add
-GET          /api/get/beacon/add/:beaconUUID/:major/:minor/:beaconType/:position controllers.BeaconController.addGET(beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String)
+POST          /api/beacon/update                           controllers.BeaconController.update
+GET           /api/get/beacon/update                           controllers.BeaconController.updateGET(id: String, beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String)
+GET           /api/get/beacon/add/:beaconUUID/:major/:minor/:beaconType/:position controllers.BeaconController.addGET(beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String)
 GET           /api/beacon/all                              controllers.BeaconController.getAll
 
 

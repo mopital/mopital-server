@@ -35,6 +35,7 @@ trait DaoComponent {
 
   trait BeaconDao {
     def add(beacon: Beacon): Future[Boolean]
+    def update(beacon: Beacon): Future[Boolean]
     def getAll(): Future[List[Beacon]]
     def get(id: String): Future[Option[Beacon]]
   }
@@ -127,7 +128,9 @@ trait DaoComponentImpl extends DaoComponent {
     def add(beacon: Beacon): Future[Boolean] = {
       beaconCollection.insert(beacon).map(lastError => !lastError.inError)
     }
-
+    def update(beacon: Beacon): Future[Boolean] = {
+      beaconCollection.update(byId(beacon.id.get), beacon).map(lastError => !lastError.inError)
+    }
     def getAll(): Future[List[Beacon]] = {
       beaconCollection.find(BSONDocument(), BSONDocument()).cursor[Beacon].collect[List](Int.MaxValue, true)
     }

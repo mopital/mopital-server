@@ -133,6 +133,13 @@ trait PatientController extends Controller with DaoComponent with PatientService
     )
   }
 
+  def notifyUserGet(userId: String, messageToSend: String) = Action.async {
+    val notifyUserRequest: NotifyUserRequest = new NotifyUserRequest(userId, messageToSend)
+    gcmService.notifyUser(notifyUserRequest).map { result =>
+      getResponseFromResult(result)
+    }
+  }
+
 }
 
 object PatientController extends PatientController
