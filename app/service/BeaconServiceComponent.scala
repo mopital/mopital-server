@@ -1,7 +1,7 @@
 package service
 
 import dao.DaoComponent
-import models.{UpdateBeaconRequest, AddBeaconRequest, Beacon}
+import models._
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
@@ -17,6 +17,7 @@ trait BeaconServiceComponent {
 
     def add(addBeaconRequest: AddBeaconRequest): Future[Boolean]
     def update(updateBeacon: UpdateBeaconRequest): Future[Boolean]
+    def addBeaconLog(addBeaconLogRequest: AddBeaconLogRequest): Future[Boolean]
     def getAll(): Future[List[Beacon]]
     def get(id: String): Future[Option[Beacon]]
   }
@@ -39,6 +40,10 @@ trait BeaconServiceComponentImpl extends BeaconServiceComponent {
     def update(updateBeacon: UpdateBeaconRequest): Future[Boolean] = {
       val beacon = new Beacon(updateBeacon)
       beaconDao.update(beacon)
+    }
+
+    def addBeaconLog(addBeaconLogRequest: AddBeaconLogRequest): Future[Boolean] = {
+      beaconLogDao.add(new BeaconLog(addBeaconLogRequest))
     }
     def getAll(): Future[List[Beacon]] = {
       beaconDao.getAll()

@@ -21,6 +21,7 @@ trait DaoComponent {
   val bedDao: BedDao
   val equipmentDao: EquipmentDao
   val gcmDao: GCMDao
+  val beaconLogDao: BeaconLogDao
 
   trait PatientDao {
 
@@ -41,6 +42,7 @@ trait DaoComponent {
     def count(): Future[Int]
     def getAll(): Future[List[Beacon]]
     def get(id: String): Future[Option[Beacon]]
+    def getByMinor(minor: Int): Future[Option[Beacon]]
   }
 
   trait BedDao {
@@ -50,7 +52,7 @@ trait DaoComponent {
     def count(): Future[Int]
     def updateBed(id:String, bed:Bed): Future[Boolean]
     def updateBedBeacon(id:String, beacon:Beacon): Future[Boolean]
-    def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]]
+    def getByBeaconMinor(beaconMinor: Int):Future[Option[Bed]]
   }
 
   trait EquipmentDao {
@@ -61,10 +63,15 @@ trait DaoComponent {
     def setBeacon(id: String, beacon: Beacon): Future[Boolean]
   }
 
+  trait BeaconLogDao {
+    def add(beaconLog: BeaconLog): Future[Boolean]
+    def findLastLog(equipmentBeacon: Beacon): Future[Option[BeaconLog]]
+    def nearestLog(recordedAt: Long): Future[Option[BeaconLog]]
+  }
+
   trait GCMDao {
 
     def add(gcmHolder: GCMHolder): Future[Boolean]
-
     def getGCMIdByUserId(userId: String): Future[Option[GCMHolder]]
 
   }
@@ -77,6 +84,7 @@ trait DaoComponentImpl extends DaoComponent {
   val bedDao = new BedDaoImpl
   val equipmentDao = new EquipmentDaoImpl
   val gcmDao = new GCMDaoImpl
+  val beaconLogDao = new BeaconLogDaoImpl
 
   class PatientDaoImpl extends PatientDao with MongoOps{
 
@@ -150,6 +158,10 @@ trait DaoComponentImpl extends DaoComponent {
     def get(id: String): Future[Option[Beacon]] = {
       beaconCollection.find(byId(id), BSONDocument()).cursor[Beacon].headOption
     }
+
+    def getByMinor(minor: Int): Future[Option[Beacon]] = {
+      beaconCollection.find(BSONDocument("minor" -> minor), BSONDocument()).cursor[Beacon].headOption
+    }
   }
 
 
@@ -176,8 +188,8 @@ trait DaoComponentImpl extends DaoComponent {
       bedCollection.update(byId(id), BSONDocument("$set" -> BSONDocument("beacon" -> beacon))).map(lastError => !lastError.inError)
     }
 
-    def getByBeaconNumber(beaconNumber: String):Future[Option[Bed]] = {
-      val query = BSONDocument( "beacon.uuid" -> beaconNumber)
+    def getByBeaconMinor(beaconMinor: Int):Future[Option[Bed]] = {
+      val query = BSONDocument( "beacon.minor" -> beaconMinor)
       bedCollection.find(query, BSONDocument()).cursor[Bed].headOption
     }
   }
@@ -217,6 +229,23 @@ trait DaoComponentImpl extends DaoComponent {
 
     def getGCMIdByUserId(userId: String): Future[Option[GCMHolder]] = {
       gcmCollection.find(BSONDocument("user_id" -> userId)).cursor[GCMHolder].headOption
+    }
+  }
+
+  class BeaconLogDaoImpl extends BeaconLogDao with MongoOps {
+
+    def beaconLogCollection: BSONCollection = dao.Mongo.db.collection[BSONCollection]("beaconLog")
+
+    def add(beaconLog: BeaconLog): Future[Boolean] = {
+      beaconLogCollection.insert(beaconLog).map(lastError => !lastError.inError)
+    }
+
+    def findLastLog(equipmentBeacon: Beacon): Future[Option[BeaconLog]] = {
+      beaconLogCollection.find(BSONDocument("minor" -> equipmentBeacon.minor, "recordedAt" -> BSONDocument("$lte" -> System.currentTimeMillis()))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+    }
+
+    def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
+      beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beaconType" -> "NavigationBeacon", "beaconType" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
     }
   }
 

@@ -35,6 +35,16 @@ object AddBeaconRequest {
   implicit val addBeaconRequest = Json.format[AddBeaconRequest]
 }
 
+
+case class AddBeaconLogRequest(minor: Int, email: String) {
+  def this() = this(0, "")
+}
+
+object AddBeaconLogRequest {
+
+  implicit val addBeaconLogRequest = Json.format[AddBeaconLogRequest]
+}
+
 case class UpdateBeaconRequest (id: String, beaconUUID: String, major: Int, minor: Int, beaconType: String, position: String) {
   def this() = this("", "", 10, 10, "", "")
 }

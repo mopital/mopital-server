@@ -44,7 +44,7 @@ trait PatientController extends Controller with DaoComponent with PatientService
 
 
   def getPatientBeaconMap() = Action.async {
-    patientService.getPatientBeaconMap().map(result => Ok(JsObject(Seq("result" -> ResponseBase.success().toJson, "data" -> result))))
+    patientService.getPatientBeaconMap().map(result => Ok(JsObject(Seq("result" -> ResponseBase.success().toJson, "data" -> JsObject(Seq("patientBeaconMapList" -> result))))))
   }
 
   def allPatients() = Action.async {
@@ -52,9 +52,9 @@ trait PatientController extends Controller with DaoComponent with PatientService
   }
 
 
-  def getPatientByBeaconUUID(uuid: String) = Action.async {
+  def getPatientByBeaconMinor(minor: Int) = Action.async {
 
-    patientService.getPatientByBeaconUUID(uuid).map {
+    patientService.getPatientByBeaconMinor(minor).map {
       case Some(patient) =>
         AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson))
       case _ => AllowRemoteResult(Ok(ResponseBase.error().toJson))

@@ -2,6 +2,7 @@ package service
 
 import dao.DaoComponent
 import models._
+import play.api.Logger
 import play.api.libs.json.{Json, JsObject, JsArray}
 
 import scala.concurrent.Future
@@ -55,7 +56,39 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
     }
 
     def getLastPosition(id: String): Future[BeaconPosition] = {
-      Future.successful(new BeaconPosition("Enterence of Hospital"))
+      equipmentDao.get(id).flatMap(
+        {
+          case Some(equipment) =>
+            Logger.debug("equipment" + equipment.toJson().toString())
+            beaconLogDao.findLastLog(equipment.beacon).flatMap( {
+              case Some(beaconLog) =>
+                Logger.debug("beaconLog" + beaconLog.toJson().toString())
+                beaconLogDao.nearestLog(beaconLog.recordedAt).flatMap(
+                {
+                  case Some(bLog) =>
+                    Logger.debug("bLog" + bLog.toJson().toString())
+                    beaconDao.getByMinor(bLog.minor).map(
+                    {
+                      case Some(beacon) =>
+                        Logger.debug("beacon" + beacon.toJson().toString())
+                        new BeaconPosition(beacon.position)
+                      case _ =>
+                        new BeaconPosition("Unknown")
+                    }
+                    )
+                  case _ =>
+                    Future.successful(new BeaconPosition("Unknown"))
+                }
+                )
+              case _ =>
+                Future.successful(new BeaconPosition("Unknown"))
+            }
+            )
+            Future.successful(new BeaconPosition("Unknown"))
+          case _ =>
+            Future.successful(new BeaconPosition("Unknown"))
+        }
+      )
     }
   }
 }

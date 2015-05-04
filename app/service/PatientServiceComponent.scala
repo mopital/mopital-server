@@ -23,7 +23,7 @@ trait PatientServiceComponent {
     def get(id: String): Future[Option[Patient]]
     def getPatientBeaconMap(): Future[JsArray]
     def getAll(): Future[List[Patient]]
-    def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]]
+    def getPatientByBeaconMinor(minor: Int): Future[Option[Patient]]
     def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean]
     def addBloodSugarMonitoring(addBloodSugarMonitoringRequest: AddBloodSugarMonitoringRequest): Future[Boolean]
     def addPeriodicMonitoring(addPeriodicMonitoringRequest: AddPeriodicMonitoringRequest): Future[Boolean]
@@ -50,8 +50,8 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
       patientDao.get(id)
     }
 
-    def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]] = {
-      bedDao.getByBeaconNumber(uuid).flatMap {
+    def getPatientByBeaconMinor(minor: Int): Future[Option[Patient]] = {
+      bedDao.getByBeaconMinor(minor).flatMap {
         case Some(bed) =>
           //check result and generate appropriate response
           patientDao.getPatientByBedNumber(bed.bed_number).map(result => result)
@@ -70,7 +70,7 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
         allPatients <- patients
         allBeds <- beds
       } yield {
-        JsArray(allPatients.map(patient => JsObject(Seq("patientId" -> Json.toJson(patient.id.get.toString()),
+        JsArray(allPatients.map(patient => JsObject(Seq("patientId" -> Json.toJson(patient.id.get.stringify),
           "beaconMinor" -> Json.toJson(
             allBeds.find(b => b.bed_number == patient.bedNumber)
             match {

@@ -1,7 +1,7 @@
 package controllers
 
 import dao.{ResponseListBeacon, DaoComponentImpl, DaoComponent}
-import models.{UpdateBeaconRequest, AddBeaconRequest}
+import models.{AddBeaconLogRequest, UpdateBeaconRequest, AddBeaconRequest}
 import play.api.Logger
 import play.api.mvc.{Result, Action, Controller}
 import service.{BeaconServiceComponentImpl, BeaconServiceComponent}
@@ -57,6 +57,19 @@ trait BeaconController extends Controller with DaoComponent with BeaconServiceCo
 
   def getAll() = Action.async {
     beaconService.getAll().map(beacons => AllowRemoteResult(Ok(ResponseListBeacon(ResponseBase.success(), beacons).toJson)))
+  }
+
+  def addBeaconLog() = Action.async(parse.json) { request =>
+    request.body.validate[AddBeaconLogRequest].fold (
+
+      valid = { addBeaconLogRequest: AddBeaconLogRequest =>
+        beaconService.addBeaconLog(addBeaconLogRequest).map ( result => getResponseFromResult(result))
+      },
+      invalid = { e => Logger.error(s"Add Patient Controller] $e");
+        Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
+      }
+    )
+
   }
 
 
