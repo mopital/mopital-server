@@ -245,8 +245,25 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "beacon.beacon_type" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
+      val firstLog = beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "beacon.beacon_type" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
+      val secondLog = beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "beacon.beacon_type" -> "BedBeacon"), "recordedAt" -> BSONDocument("$gtac" -> recordedAt))).cursor[BeaconLog].headOption
+
+      for {
+        f <- firstLog
+        s <- secondLog
+      } yield {
+        f match {
+          case Some(log1) =>
+            s match {
+              case Some(log2) =>
+                if(Math.abs(log1.recordedAt - recordedAt) < Math.abs(log2.recordedAt - recordedAt)) f else s
+              case _ =>
+                f
+            }
+          case _ =>
+            s
+        }
+      }
     }
   }
-
 }
