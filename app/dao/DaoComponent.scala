@@ -5,7 +5,7 @@ import java.awt.print.Book
 import models._
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
+import reactivemongo.bson.{BSONArray, BSONDocument, BSONObjectID}
 import reactivemongo.core.commands.Count
 
 import scala.concurrent.Future
@@ -245,8 +245,9 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      val firstLog = beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "beacon.beacon_type" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
-      val secondLog = beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "beacon.beacon_type" -> "BedBeacon"), "recordedAt" -> BSONDocument("$gtac" -> recordedAt))).cursor[BeaconLog].headOption
+      val queryBeaconType = BSONDocument("$and" -> BSONArray(List(BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray("NavigationBeacon", "BedBeacon"))))))
+      val firstLog = beaconLogCollection.find(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
+      val secondLog = beaconLogCollection.find(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).cursor[BeaconLog].headOption
 
       for {
         f <- firstLog
