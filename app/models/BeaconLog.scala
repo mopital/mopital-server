@@ -1,20 +1,19 @@
 package models
 
-import models.AddBeaconLogRequest
 import play.api.libs.json.{JsValue, JsObject, Json}
 import reactivemongo.bson.{BSONDocumentReader, BSONObjectID, BSONDocument, BSONDocumentWriter}
 
 /**
  * Created by ahmetkucuk on 04/05/15.
  */
-case class BeaconLog(recordedAt: Long, email: String, minor: Int) {
+case class BeaconLog(recordedAt: Long, email: String, beacon: Beacon) {
 
-  def this(addBeaconLogRequest: AddBeaconLogRequest) = {
-    this(System.currentTimeMillis(), addBeaconLogRequest.email, addBeaconLogRequest.minor)
+  def this(addBeaconLogRequest: AddBeaconLogRequest, beacon: Beacon) = {
+    this(System.currentTimeMillis(), addBeaconLogRequest.email, beacon)
   }
 
   def toJson(): JsValue = {
-    JsObject(Seq("recordedAt" -> Json.toJson(recordedAt), "email" -> Json.toJson(email), "minor" -> Json.toJson(minor)))
+    JsObject(Seq("recordedAt" -> Json.toJson(recordedAt), "email" -> Json.toJson(email), "beacon" -> Json.toJson(beacon)))
   }
 
 }
@@ -29,7 +28,7 @@ object BeaconLog {
       BSONDocument(
         "recordedAt" -> beaconLog.recordedAt,
         "email" -> beaconLog.email,
-        "minor" -> beaconLog.minor
+        "beacon" -> beaconLog.beacon
       )
   }
 
@@ -39,7 +38,7 @@ object BeaconLog {
       BeaconLog(
         doc.getAs[Long]("recordedAt").get,
         doc.getAs[String]("email").get,
-        doc.getAs[Int]("minor").get
+        doc.getAs[Beacon]("beacon").get
       )
   }
 

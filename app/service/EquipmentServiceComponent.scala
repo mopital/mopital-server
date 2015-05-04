@@ -63,19 +63,10 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
             beaconLogDao.findLastLog(equipment.beacon).flatMap( {
               case Some(beaconLog) =>
                 Logger.debug("beaconLog" + beaconLog.toJson().toString())
-                beaconLogDao.nearestLog(beaconLog.recordedAt).flatMap(
+                beaconLogDao.nearestLog(beaconLog.recordedAt).map(
                 {
                   case Some(bLog) =>
-                    Logger.debug("bLog" + bLog.toJson().toString())
-                    beaconDao.getByMinor(bLog.minor).map(
-                    {
-                      case Some(beacon) =>
-                        Logger.debug("beacon" + beacon.toJson().toString())
-                        new BeaconPosition(beacon.position)
-                      case _ =>
-                        new BeaconPosition("Unknown")
-                    }
-                    )
+                    new BeaconPosition(bLog.beacon.position)
                   case _ =>
                     Future.successful(new BeaconPosition("Unknown"))
                 }

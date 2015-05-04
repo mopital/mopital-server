@@ -4,6 +4,7 @@ import dao.DaoComponent
 import models._
 import reactivemongo.bson.BSONObjectID
 
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.Future
 
 /**
@@ -43,7 +44,13 @@ trait BeaconServiceComponentImpl extends BeaconServiceComponent {
     }
 
     def addBeaconLog(addBeaconLogRequest: AddBeaconLogRequest): Future[Boolean] = {
-      beaconLogDao.add(new BeaconLog(addBeaconLogRequest))
+      beaconDao.getByMinor(addBeaconLogRequest.minor).flatMap ( {
+        case Some(beacon) =>
+          beaconLogDao.add(new BeaconLog(addBeaconLogRequest, beacon))
+        case _ =>
+          Future.successful(false)
+      }
+      )
     }
     def getAll(): Future[List[Beacon]] = {
       beaconDao.getAll()
