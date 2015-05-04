@@ -241,11 +241,11 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def findLastLog(equipmentBeacon: Beacon): Future[Option[BeaconLog]] = {
-      beaconLogCollection.find(BSONDocument("minor" -> equipmentBeacon.minor, "recordedAt" -> BSONDocument("$lte" -> System.currentTimeMillis()))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+      beaconLogCollection.find(BSONDocument("beacon.minor" -> equipmentBeacon.minor, "recordedAt" -> BSONDocument("$lte" -> System.currentTimeMillis()))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beaconType" -> "NavigationBeacon", "beaconType" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
+      beaconLogCollection.find(BSONDocument("$in" -> BSONDocument("beacon.beaconType" -> "NavigationBeacon", "beacon.beaconType" -> "BedBeacon"), "recordedAt" -> BSONDocument("$lte" -> recordedAt))).cursor[BeaconLog].headOption
     }
   }
 
