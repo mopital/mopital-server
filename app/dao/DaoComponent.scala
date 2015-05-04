@@ -245,7 +245,7 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray("NavigationBeacon", "BedBeacon")))
+      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
       val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt)))))).cursor[BeaconLog].headOption
       val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt)))))).cursor[BeaconLog].headOption
 
