@@ -51,10 +51,6 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
     )
   }
 
-  def getPatientBeaconMap() = Action.async {
-    equipmentService.getPatientEquipmentMap().map(result => Ok(JsObject(Seq("result" -> ResponseBase.success().toJson, "data" -> result))))
-  }
-
   def getAll() = Action.async {
     equipmentService.getAll().map(equipments => AllowRemoteResult(Ok(ResponseListEquipment(ResponseBase.success(), equipments).toJson)))
   }

@@ -34,6 +34,7 @@ POST          /api/patient/add                             controllers.PatientCo
 GET           /api/patient/get/:id                         controllers.PatientController.get(id: String)
 GET           /api/patient/all                             controllers.PatientController.allPatients
 GET           /api/patient/beacon/get/:uuid                controllers.PatientController.getPatientByBeaconUUID(uuid: String)
+GET           /api/patient/beacon/map                      controllers.PatientController.getPatientBeaconMap
 POST          /api/patient/add/treatment                   controllers.PatientController.addTreatment
 POST          /api/patient/add/bloodSugarMonitoring        controllers.PatientController.addBloodSugarMonitoringData
 POST          /api/patient/add/periodicMonitoring          controllers.PatientController.addPeriodicMonitoringData

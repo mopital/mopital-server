@@ -3,6 +3,7 @@ package service
 import dao.DaoComponent
 import models._
 import play.api.Logger
+import play.api.libs.json.{Json, JsObject, JsArray}
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
@@ -20,6 +21,7 @@ trait PatientServiceComponent {
 
     def add(addPatientRequest: AddPatientRequest): Future[Boolean]
     def get(id: String): Future[Option[Patient]]
+    def getPatientBeaconMap(): Future[JsArray]
     def getAll(): Future[List[Patient]]
     def getPatientByBeaconUUID(uuid: String): Future[Option[Patient]]
     def addTreatment(addTreatmentRequest: AddTreatmentRequest): Future[Boolean]
@@ -56,6 +58,29 @@ trait PatientServiceComponentImpl extends PatientServiceComponent {
         case _ =>
           Logger.debug("bed_number11")
           null
+      }
+    }
+
+
+    def getPatientBeaconMap(): Future[JsArray] = {
+
+      val patients = patientDao.getAll()
+      val beds = bedDao.getAll()
+      for {
+        allPatients <- patients
+        allBeds <- beds
+      } yield {
+        JsArray(allPatients.map(patient => JsObject(Seq("patientId" -> Json.toJson(patient.id.get.toString()),
+          "beaconMinor" -> Json.toJson(
+            allBeds.find(b => b.bed_number == patient.bedNumber)
+            match {
+              case Some(bed) =>
+                bed.beacon.minor
+              case _ =>
+                -1
+            })
+        ))
+        ))
       }
     }
 

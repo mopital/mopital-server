@@ -4,7 +4,7 @@ import dao._
 import models._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc._
 import reactivemongo.bson.BSONObjectID
 import service.{GCMServiceComponentImpl, GCMServiceComponent, PatientServiceComponent, PatientServiceComponentImpl}
@@ -40,6 +40,11 @@ trait PatientController extends Controller with DaoComponent with PatientService
         AllowRemoteResult(Ok(ResponseBaseModel(ResponseBase.success(), patient).toJson))
       case _ => AllowRemoteResult(Ok(ResponseBase.error().toJson))
     }
+  }
+
+
+  def getPatientBeaconMap() = Action.async {
+    patientService.getPatientBeaconMap().map(result => Ok(JsObject(Seq("result" -> ResponseBase.success().toJson, "data" -> result))))
   }
 
   def allPatients() = Action.async {

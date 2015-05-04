@@ -19,7 +19,6 @@ trait EquipmentServiceComponent {
 
     def add(addEquipmentRequest: AddEquipmentRequest): Future[Boolean]
     def getAll(): Future[List[Equipment]]
-    def getPatientEquipmentMap(): Future[JsArray]
     def get(id: String): Future[Option[Equipment]]
     def setBeacon(setBeaconToEquipment: SetBeaconToEquipment): Future[Boolean]
     def getLastPosition(id: String): Future[BeaconPosition]
@@ -40,29 +39,6 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
     }
 
     def getAll(): Future[List[Equipment]] = {equipmentDao.getAll() }
-
-
-    def getPatientEquipmentMap: Future[JsArray] = {
-
-      val patients = patientDao.getAll()
-      val beds = bedDao.getAll()
-      for {
-        allPatients <- patients
-        allBeds <- beds
-      } yield {
-        JsArray(allPatients.map(patient => JsObject(Seq("patientId" -> Json.toJson(patient.id.get.toString()),
-          "beaconMinor" -> Json.toJson(
-            allBeds.find(b => b.bed_number == patient.bedNumber)
-            match {
-              case Some(bed) =>
-                bed.beacon.minor
-              case _ =>
-                -1
-            })
-        ))
-        ))
-      }
-    }
 
     def get(id: String): Future[Option[Equipment]] = {equipmentDao.get(id) }
 
