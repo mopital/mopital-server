@@ -15,7 +15,7 @@ class WebCoreResponseObjects {
 
 case class ResponseListUser(result: ResponseBase, data:List[User]) {
   def toJson: JsObject = {
-    JsObject(Seq(WebCoreConstants.RESULT -> result.toJson, WebCoreConstants.DATA -> JsArray(data.map( user => user.toJson))))
+    JsObject(Seq(WebCoreConstants.RESULT -> result.toJson, WebCoreConstants.DATA -> JsObject(Seq("userList" -> JsArray(data.map( user => user.toJson))))))
   }
 }
 object ResponseListUser
