@@ -2,13 +2,15 @@ package controllers
 
 import dao._
 import models.{SetBeaconToEquipment, SetBeaconToBedRequest, AddEquipmentRequest, AddBedRequest}
-import play.api.Logger
+import play.api
+import play.api.{data, Logger}
+import play.api.libs.json.{JsArray, JsObject}
 import play.api.mvc.Action
 import play.api.mvc.BodyParsers.parse
 import play.api.mvc.Controller
 import service.{EquipmentServiceComponentImpl, EquipmentServiceComponent, BedServiceComponent}
 import third.webcore.models.ResponseBase
-import utils.ControllerHelperFunctions
+import utils.{Constants, ControllerHelperFunctions}
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -47,6 +49,10 @@ trait EquipmentController extends Controller with DaoComponent with EquipmentSer
         Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
     )
+  }
+
+  def getPatientBeaconMap() = Action.async {
+    equipmentService.getPatientEquipmentMap().map(result => Ok(JsObject(Seq("result" -> ResponseBase.success().toJson, "data" -> result))))
   }
 
   def getAll() = Action.async {
