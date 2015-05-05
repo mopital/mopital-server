@@ -10,6 +10,8 @@ import scala.concurrent.{Await, Future}
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
+import scala.util.{Failure, Success}
+
 /**
  * Created by ahmetkucuk on 28/03/15.
  */
@@ -58,11 +60,33 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
 
     def getLastPosition(id: String): Future[BeaconPosition] = {
 
-//      val f1 = equipmentDao.get(id)
-//      Await.result(f1, Duration.Inf)
-//      val f2 = f1.flatMap( {
-//        case Some(equipment) => beaconLogDao.findLastLog(equipment.beacon)
-//      })
+      val f1 = equipmentDao.get(id)
+      val f2 = {equipment: Equipment => beaconLogDao.findLastLog(equipment.beacon)}
+      val f3 = {beaconLog: BeaconLog => beaconLogDao.nearestLog(beaconLog.recordedAt)}
+
+      f1.onSuccess({
+          case Some(equipment) =>
+            f2{equipment}.onSuccess( {
+              case Some(beaconLog) =>
+                f3(beaconLog).onSuccess({
+                  case Some(bLog) =>
+                    new BeaconLog(bLog.beacon.position)
+                  case _ =>
+                    Future.successful(new BeaconPosition("Unknown"))
+
+                })
+              case _ =>
+                Future.successful(new BeaconPosition("Unknown"))
+            }
+            )
+          case _ =>
+            Future.successful(new BeaconPosition("Unknown"))
+        }
+      )
+
+//      Await.result(f1, Duration.I
+// nf)
+
 //      Await.result(f2, Duration.Inf)
 //      val f3 = f2.flatMap({
 //        case Some(beaconLog) => beaconLogDao.nearestLog(beaconLog.recordedAt)
@@ -76,26 +100,26 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
 //      })
 //      Await.result(f4, Duration.Inf)
 
-      equipmentDao.get(id).flatMap(
-        {
-          case Some(equipment) =>
-            Logger.debug("equipment" + equipment.toJson().toString())
-            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
-              case Some(beaconLog) =>
-                Logger.debug("beaconLog" + beaconLog.toJson().toString())
-                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
-                  case Some(bLog) =>
-                    Logger.debug("bLog" + bLog.toJson().toString())
-                    new BeaconPosition(bLog.beacon.position)
-                }
-              case _ =>
-                Future.successful(new BeaconPosition("Unknown"))
-            }
-            Future.successful(new BeaconPosition("Unknown"))
-          case _ =>
-            Future.successful(new BeaconPosition("Unknown"))
-        }
-      )
+//      equipmentDao.get(id).flatMap(
+//        {
+//          case Some(equipment) =>
+//            Logger.debug("equipment" + equipment.toJson().toString())
+//            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
+//              case Some(beaconLog) =>
+//                Logger.debug("beaconLog" + beaconLog.toJson().toString())
+//                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
+//                  case Some(bLog) =>
+//                    Logger.debug("bLog" + bLog.toJson().toString())
+//                    new BeaconPosition(bLog.beacon.position)
+//                }
+//              case _ =>
+//                Future.successful(new BeaconPosition("Unknown"))
+//            }
+//            Future.successful(new BeaconPosition("Unknown"))
+//          case _ =>
+//            Future.successful(new BeaconPosition("Unknown"))
+//        }
+//      )
     }
   }
 }
