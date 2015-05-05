@@ -57,26 +57,46 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
     }
 
     def getLastPosition(id: String): Future[BeaconPosition] = {
-      equipmentDao.get(id).flatMap(
-        {
-          case Some(equipment) =>
-            Logger.debug("equipment" + equipment.toJson().toString())
-            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
-              case Some(beaconLog) =>
-                Logger.debug("beaconLog" + beaconLog.toJson().toString())
-                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
-                  case Some(bLog) =>
-                    Logger.debug("bLog" + bLog.toJson().toString())
-                    new BeaconPosition(bLog.beacon.position)
-                }
-              case _ =>
-                Future.successful(new BeaconPosition("Unknown"))
-            }
-            Future.successful(new BeaconPosition("Unknown"))
-          case _ =>
-            Future.successful(new BeaconPosition("Unknown"))
-        }
-      )
+
+      val f1 = equipmentDao.get(id)
+      Await.result(f1, Duration.Inf)
+      val f2 = f1.flatMap( {
+        case Some(equipment) => beaconLogDao.findLastLog(equipment.beacon)
+      })
+      Await.result(f2, Duration.Inf)
+      val f3 = f2.flatMap({
+        case Some(beaconLog) => beaconLogDao.nearestLog(beaconLog.recordedAt)
+      })
+      Await.result(f3, Duration.Inf)
+      val f4 = f3.map({
+        case Some(bLog) =>
+          new BeaconPosition(bLog.beacon.position)
+        case _ =>
+          new BeaconPosition("NoooooNNN")
+      })
+      Await.result(f4, Duration.Inf)
+
+//
+//      equipmentDao.get(id).flatMap(
+//        {
+//          case Some(equipment) =>
+//            Logger.debug("equipment" + equipment.toJson().toString())
+//            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
+//              case Some(beaconLog) =>
+//                Logger.debug("beaconLog" + beaconLog.toJson().toString())
+//                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
+//                  case Some(bLog) =>
+//                    Logger.debug("bLog" + bLog.toJson().toString())
+//                    new BeaconPosition(bLog.beacon.position)
+//                }
+//              case _ =>
+//                Future.successful(new BeaconPosition("Unknown"))
+//            }
+//            Future.successful(new BeaconPosition("Unknown"))
+//          case _ =>
+//            Future.successful(new BeaconPosition("Unknown"))
+//        }
+//      )
     }
   }
 }
