@@ -70,7 +70,7 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
               case Some(beaconLog) =>
                 f3(beaconLog).onSuccess({
                   case Some(bLog) =>
-                    new BeaconLog(bLog.beacon.position)
+                    new BeaconPosition(bLog.beacon.position)
                   case _ =>
                     Future.successful(new BeaconPosition("Unknown"))
 
