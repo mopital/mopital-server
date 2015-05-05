@@ -70,28 +70,16 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
       val equipment = Await.result(f1, Duration.Inf).get
       val lastLog = Await.result(f2{equipment}, Duration.Inf).getOrElse(beaconLogMock)
       val beaconLog1Opt = Await.result(f3{lastLog}, Duration.Inf)
-      val beaconLog2Opt = Await.result(f3{lastLog}, Duration.Inf)
+      val beaconLog2Opt = Await.result(f4{lastLog}, Duration.Inf)
 
       beaconLog1Opt match {
         case Some(beaconLog) =>
-          if(beaconLog.beacon.beaconType.equalsIgnoreCase("EquipmentBeacon"))
             beaconLog2Opt match {
               case Some(beaconLog2) =>
-                Future.successful(new BeaconPosition(beaconLog2.beacon.position))
-              case _ =>
-                Future.successful(new BeaconPosition("Bilinmiyor"))
-            }
-          else
-            beaconLog2Opt match {
-              case Some(beaconLog2) =>
-                if(beaconLog2.beacon.beaconType.equalsIgnoreCase("EquipmentBeacon"))
+                if(Math.abs(beaconLog.recordedAt - lastLog.recordedAt) < Math.abs(beaconLog2.recordedAt - lastLog.recordedAt))
                   Future.successful(new BeaconPosition(beaconLog.beacon.position))
-                else {
-                  if(Math.abs(beaconLog.recordedAt - lastLog.recordedAt) < Math.abs(beaconLog2.recordedAt - lastLog.recordedAt))
-                    Future.successful(new BeaconPosition(beaconLog.beacon.position))
-                  else
-                    Future.successful(new BeaconPosition(beaconLog2.beacon.position))
-                }
+                else
+                  Future.successful(new BeaconPosition(beaconLog2.beacon.position))
               case _ =>
                 Future.successful(new BeaconPosition(beaconLog.beacon.position))
             }
