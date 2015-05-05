@@ -67,7 +67,8 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
 
 
       val beaconLogMock = new BeaconLog(0, "", new Beacon())
-      val lastLog = Await.result(f2{Await.result(f1, Duration.Inf).get}, Duration.Inf).getOrElse(beaconLogMock)
+      val equipment = Await.result(f1, Duration.Inf).get
+      val lastLog = Await.result(f2{equipment}, Duration.Inf).getOrElse(beaconLogMock)
       val beaconLog1Opt = Await.result(f3{lastLog}, Duration.Inf)
       val beaconLog2Opt = Await.result(f3{lastLog}, Duration.Inf)
 

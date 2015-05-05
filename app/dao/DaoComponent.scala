@@ -249,9 +249,9 @@ trait DaoComponentImpl extends DaoComponent {
 //      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
 //      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
       if(flag)
-        beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+        beaconLogCollection.find(BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
       else
-        beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+        beaconLogCollection.find(BSONDocument("beacon.beacon_type" -> "NavigationBeacon", "recordedAt" -> BSONDocument("$lt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
 //      val secondLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
 
 //      firstLog.flatMap(f =>
