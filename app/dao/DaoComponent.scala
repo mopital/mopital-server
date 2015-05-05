@@ -245,9 +245,12 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray("NavigationBeacon", "BedBeacon")))
-      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
-      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
+//      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray("NavigationBeacon", "BedBeacon")))
+//      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+//      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
+
+      val firstLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+      val secondLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
 
       for {
         f <- firstLog
