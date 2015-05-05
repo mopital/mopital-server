@@ -69,6 +69,7 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
                     Logger.debug("bLog" + bLog.toJson().toString())
                     new BeaconPosition(bLog.beacon.position)
                   case _ =>
+                    Logger.debug("bLogbos")
                     Future.successful(new BeaconPosition("Unknown"))
                 }
               case _ =>
