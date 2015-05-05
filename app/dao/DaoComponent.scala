@@ -5,7 +5,7 @@ import java.awt.print.Book
 import models._
 import play.api.Logger
 import reactivemongo.api.collections.default.BSONCollection
-import reactivemongo.bson.{BSONArray, BSONDocument, BSONObjectID}
+import reactivemongo.bson._
 import reactivemongo.core.commands.Count
 
 import scala.concurrent.Future
@@ -245,9 +245,9 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
-      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt)))))).cursor[BeaconLog].headOption
-      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt)))))).cursor[BeaconLog].headOption
+      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray("NavigationBeacon", "BedBeacon")))
+      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
 
       for {
         f <- firstLog
@@ -255,8 +255,10 @@ trait DaoComponentImpl extends DaoComponent {
       } yield {
         f match {
           case Some(log1) =>
+            Logger.debug("log1" + log1.toJson().toString())
             s match {
               case Some(log2) =>
+                Logger.debug("log2" + log2.toJson().toString())
                 if(Math.abs(log1.recordedAt - recordedAt) < Math.abs(log2.recordedAt - recordedAt)) f else s
               case _ =>
                 f
