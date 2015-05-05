@@ -22,7 +22,7 @@ object Mongo {
 //  val db = connection("mopital")
 
 
-// HEROKU Databse Connection
+//// HEROKU Databse Connection
   val uri = "mongodb://mopital:mopital@ds043991.mongolab.com:43991/heroku_app34029761"
 
   val connection: Try[MongoConnection] =

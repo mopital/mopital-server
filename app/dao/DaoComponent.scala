@@ -66,7 +66,7 @@ trait DaoComponent {
   trait BeaconLogDao {
     def add(beaconLog: BeaconLog): Future[Boolean]
     def findLastLog(equipmentBeacon: Beacon): Future[Option[BeaconLog]]
-    def nearestLog(recordedAt: Long): Future[Option[BeaconLog]]
+    def nearestLog(recordedAt: Long, flag: Boolean): Future[Option[BeaconLog]]
   }
 
   trait GCMDao {
@@ -244,11 +244,14 @@ trait DaoComponentImpl extends DaoComponent {
       beaconLogCollection.find(BSONDocument("beacon.minor" -> equipmentBeacon.minor, "recordedAt" -> BSONDocument("$lte" -> System.currentTimeMillis()))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
     }
 
-    def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
+    def nearestLog(recordedAt: Long, flag: Boolean): Future[Option[BeaconLog]] = {
+//      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
 //      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
 //      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
-      beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).query(queryBeaconType).cursor[BeaconLog].headOption
+      if(flag)
+        beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
+      else
+        beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lt" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
 //      val secondLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
 
 //      firstLog.flatMap(f =>
