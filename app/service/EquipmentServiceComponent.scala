@@ -59,30 +59,30 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
     }
 
     def getLastPosition(id: String): Future[BeaconPosition] = {
-
-      val f1 = equipmentDao.get(id)
-      val f2 = {equipment: Equipment => beaconLogDao.findLastLog(equipment.beacon)}
-      val f3 = {beaconLog: BeaconLog => beaconLogDao.nearestLog(beaconLog.recordedAt)}
-
-      f1.onSuccess({
-          case Some(equipment) =>
-            f2{equipment}.onSuccess( {
-              case Some(beaconLog) =>
-                f3(beaconLog).onSuccess({
-                  case Some(bLog) =>
-                    new BeaconPosition(bLog.beacon.position)
-                  case _ =>
-                    Future.successful(new BeaconPosition("Unknown"))
-
-                })
-              case _ =>
-                Future.successful(new BeaconPosition("Unknown"))
-            }
-            )
-          case _ =>
-            Future.successful(new BeaconPosition("Unknown"))
-        }
-      )
+//
+//      val f1 = equipmentDao.get(id)
+//      val f2 = {equipment: Equipment => beaconLogDao.findLastLog(equipment.beacon)}
+//      val f3 = {beaconLog: BeaconLog => beaconLogDao.nearestLog(beaconLog.recordedAt)}
+//
+//      f1.onSuccess({
+//          case Some(equipment) =>
+//            f2{equipment}.onSuccess( {
+//              case Some(beaconLog) =>
+//                f3(beaconLog).onSuccess({
+//                  case Some(bLog) =>
+//                    new BeaconPosition(bLog.beacon.position)
+//                  case _ =>
+//                    Future.successful(new BeaconPosition("Unknown"))
+//
+//                })
+//              case _ =>
+//                Future.successful(new BeaconPosition("Unknown"))
+//            }
+//            )
+//          case _ =>
+//            Future.successful(new BeaconPosition("Unknown"))
+//        }
+//      )
 
 //      Await.result(f1, Duration.I
 // nf)
@@ -100,26 +100,28 @@ trait EquipmentServiceComponentImpl extends EquipmentServiceComponent {
 //      })
 //      Await.result(f4, Duration.Inf)
 
-//      equipmentDao.get(id).flatMap(
-//        {
-//          case Some(equipment) =>
-//            Logger.debug("equipment" + equipment.toJson().toString())
-//            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
-//              case Some(beaconLog) =>
-//                Logger.debug("beaconLog" + beaconLog.toJson().toString())
-//                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
-//                  case Some(bLog) =>
-//                    Logger.debug("bLog" + bLog.toJson().toString())
-//                    new BeaconPosition(bLog.beacon.position)
-//                }
-//              case _ =>
-//                Future.successful(new BeaconPosition("Unknown"))
-//            }
-//            Future.successful(new BeaconPosition("Unknown"))
-//          case _ =>
-//            Future.successful(new BeaconPosition("Unknown"))
-//        }
-//      )
+      equipmentDao.get(id).flatMap(
+        {
+          case Some(equipment) =>
+            Logger.debug("equipment" + equipment.toJson().toString())
+            Await.ready(beaconLogDao.findLastLog(equipment.beacon), Duration.Inf).value.get.get match {
+              case Some(beaconLog) =>
+                Logger.debug("beaconLog" + beaconLog.toJson().toString())
+                Await.ready(beaconLogDao.nearestLog(beaconLog.recordedAt), Duration.Inf).value.get.get match {
+                  case Some(bLog) =>
+                    Logger.debug("bLog" + bLog.toJson().toString())
+                    new BeaconPosition(bLog.beacon.position)
+                  case _ =>
+                    Future.successful(new BeaconPosition("Unknown"))
+                }
+              case _ =>
+                Future.successful(new BeaconPosition("Unknown"))
+            }
+            Future.successful(new BeaconPosition("Unknown"))
+          case _ =>
+            Future.successful(new BeaconPosition("Unknown"))
+        }
+      )
     }
   }
 }
