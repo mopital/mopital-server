@@ -245,31 +245,30 @@ trait DaoComponentImpl extends DaoComponent {
     }
 
     def nearestLog(recordedAt: Long): Future[Option[BeaconLog]] = {
-//      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
+      val queryBeaconType = BSONDocument("beacon.beacon_type" -> BSONDocument("$in" -> BSONArray(List("NavigationBeacon", "BedBeacon"))))
 //      val firstLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
 //      val secondLog = beaconLogCollection.find(BSONDocument("$and" -> BSONArray(List(queryBeaconType, BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt)))))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
+      beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).query(queryBeaconType).cursor[BeaconLog].headOption
+//      val secondLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
 
-      val firstLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$lte" -> recordedAt))).sort(BSONDocument("recordedAt" -> 1)).cursor[BeaconLog].headOption
-      val secondLog = beaconLogCollection.find(BSONDocument("recordedAt" -> BSONDocument("$gt" -> recordedAt))).sort(BSONDocument("recordedAt" -> -1)).cursor[BeaconLog].headOption
-
-      firstLog.flatMap(f =>
-
-        f match {
-          case Some(log1) =>
-            Logger.debug("log1" + log1.toJson().toString())
-            secondLog.map( s =>
-              s match {
-                case Some(log2) =>
-                  Logger.debug("log2" + log2.toJson().toString())
-                  if(Math.abs(log1.recordedAt - recordedAt) < Math.abs(log2.recordedAt - recordedAt)) f else s
-                case _ =>
-                  f
-              }
-            )
-          case _ =>
-            secondLog
-        }
-      )
+//      firstLog.flatMap(f =>
+//
+//        f match {
+//          case Some(log1) =>
+//            Logger.debug("log1" + log1.toJson().toString())
+//            secondLog.map( s =>
+//              s match {
+//                case Some(log2) =>
+//                  Logger.debug("log2" + log2.toJson().toString())
+//                  if(Math.abs(log1.recordedAt - recordedAt) < Math.abs(log2.recordedAt - recordedAt)) f else s
+//                case _ =>
+//                  f
+//              }
+//            )
+//          case _ =>
+//            secondLog
+//        }
+//      )
     }
   }
 }
