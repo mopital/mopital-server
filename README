@@ -1,4 +1,3 @@
-This is your new Play application
-=================================
+Bilkent University Senior Project Server Side Code
 
-This file will be packaged with your application, when using `activator dist`.
+Implemented in Scala on Play! Framework
