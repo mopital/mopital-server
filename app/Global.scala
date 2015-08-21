@@ -24,20 +24,17 @@ object Global extends GlobalSettings {
 //    val wcfService: WcfService = new WcfService();
 //    Logger.debug(wcfService.getBasicHttpBindingIWcfService().getUser("Name0.465239541126362").getName().getValue());
 
-    Akka.system.scheduler.schedule(Duration.apply(30, TimeUnit.SECONDS), Duration.apply(1, TimeUnit.MINUTES), KeepAlive.instance, Ping)
+//    Akka.system.scheduler.schedule(Duration.apply(30, TimeUnit.SECONDS), Duration.apply(1, TimeUnit.MINUTES), KeepAlive.instance, Ping)
   }
 
 
 }
 object KeepAlive {
-
   val instance = Akka.system.actorOf(Props[KeepAlive], name = "keep-alive")
-
 }
 
 class KeepAlive extends Actor {
-
-
+  
   def receive = {
     case Ping =>
       Logger.info("keep-alive-received");

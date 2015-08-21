@@ -30,7 +30,6 @@ trait PatientController extends Controller with DaoComponent with PatientService
       invalid = { e => Logger.error(s"Add Patient Controller] $e");
         Future.successful(AllowRemoteResult(Ok(ResponseBase.error("invalid json fields.").toResultJson)))
       }
-
     )
   }
 
