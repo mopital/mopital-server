@@ -1,4 +1,4 @@
-package third.webcore.utils
+package utils
 
 /**
  * Created by ahmetkucuk on 07/03/15.

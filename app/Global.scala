@@ -34,7 +34,7 @@ object KeepAlive {
 }
 
 class KeepAlive extends Actor {
-  
+
   def receive = {
     case Ping =>
       Logger.info("keep-alive-received");

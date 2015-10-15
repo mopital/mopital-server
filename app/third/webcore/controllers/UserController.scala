@@ -7,8 +7,7 @@ import play.i18n.Messages
 import third.webcore.dao.WebCoreDaoComponentImpl
 import third.webcore.models._
 import third.webcore.services._
-import third.webcore.utils.WebCoreConstants
-import utils.ControllerHelperFunctions
+import utils.{WebCoreConstants, ControllerHelperFunctions}
 
 import scala.concurrent.Future
 

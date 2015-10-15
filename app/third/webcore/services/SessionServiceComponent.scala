@@ -6,7 +6,7 @@ import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import third.webcore.dao.WebCoreDaoComponent
 import third.webcore.models.{SessionStatus, User}
-import third.webcore.utils.WebCoreConstants
+import utils.WebCoreConstants
 
 import scala.collection.JavaConversions._
 import scala.concurrent.Future

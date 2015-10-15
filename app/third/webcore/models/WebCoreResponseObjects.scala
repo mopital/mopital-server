@@ -3,7 +3,7 @@ package third.webcore.models
 import play.api.Logger
 import play.api.libs.json.{Json, JsArray, JsObject, JsValue}
 import reactivemongo.core.commands.LastError
-import third.webcore.utils.WebCoreConstants
+import utils.WebCoreConstants
 
 /**
  * Created by ahmetkucuk on 07/03/15.
